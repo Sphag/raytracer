@@ -30,3 +30,17 @@
 *.exe
 *.out
 *.app
+
+# Binaries and generated stuff
+**/bin/
+!vendor/bin/premake/
+bin-int/
+generated/
+build/
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
