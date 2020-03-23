@@ -33,7 +33,7 @@
 
 # Binaries and generated stuff
 **/bin/
-!vendor/bin/premake/
+!vendor/bin/premake/*
 bin-int/
 generated/
 build/
