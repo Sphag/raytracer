@@ -46,10 +46,20 @@ workspace "raytracer"
     files
 	{
 		"raytracer/%{prj.name}/src/**.h",
-		"raytracer/%{prj.name}/src/**.cpp"
+		"raytracer/%{prj.name}/src/**.cpp",
+		"raytracer/vendor/stb_image/**.h",
+		"raytracer/vendor/stb_image/**.cpp",
+		"raytracer/vendor/glm/glm/**.hpp",
+		"raytracer/vendor/glm/glm/**.inl"
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
 	{
-		
+		"raytracer/vendor/stb_image",
+		"raytracer/vendor/glm",
 	}

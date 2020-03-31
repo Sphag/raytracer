@@ -1,0 +1,3 @@
+[submodule "raytracer/vendor/glm"]
+	path = raytracer/vendor/glm
+	url = https://github.com/g-truc/glm.git
