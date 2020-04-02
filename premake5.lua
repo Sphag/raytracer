@@ -45,8 +45,43 @@ workspace "raytracer"
     
     files
 	{
-		"raytracer/%{prj.name}/src/**.h",
+		"raytracer/%{prj.name}/include/**.h",
 		"raytracer/%{prj.name}/src/**.cpp",
+		"raytracer/vendor/glm/glm/**.hpp",
+		"raytracer/vendor/glm/glm/**.inl",
+		"raytracer/vendor/stb_image/**.h",
+		"raytracer/vendor/stb_image/**.cpp"
+	}
+
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS"
+	}
+
+	links
+	{
+		"utils"
+	}
+
+	includedirs
+	{
+		"raytracer/%{prj.name}/include",
+		"raytracer/utils/include/",
+		"raytracer/vendor/glm",
+		"raytracer/vendor/stb_image/",
+	}
+
+	project "utils"
+
+    location "raytracer/utils"
+    kind "StaticLib"
+    language "C++"
+	cppdialect "C++17"
+    
+    files
+	{
+		"raytracer/utils/include/utils/**.h",
+		"raytracer/utils/src/**.cpp",
 		"raytracer/vendor/stb_image/**.h",
 		"raytracer/vendor/stb_image/**.cpp",
 		"raytracer/vendor/glm/glm/**.hpp",
@@ -60,6 +95,7 @@ workspace "raytracer"
 
 	includedirs
 	{
-		"raytracer/vendor/stb_image",
+		"raytracer/%{prj.name}/include/utils",
+		"raytracer/vendor/stb_image/",
 		"raytracer/vendor/glm",
 	}
