@@ -10,5 +10,6 @@
 
 int main()
 {
+   RayTracer::Init();
    return 0;
 }
