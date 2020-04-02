@@ -55,7 +55,8 @@ workspace "raytracer"
 
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"UTILS_USE_DEFAULT_PIXEL_TYPES"
 	}
 
 	links
@@ -90,7 +91,8 @@ workspace "raytracer"
 
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"UTILS_USE_DEFAULT_PIXEL_TYPES"
 	}
 
 	includedirs

@@ -1,11 +1,14 @@
 #include <iostream>
-#include <glm/glm.hpp>
+
 #include <utils/image.h>
 #include <utils/string_utils.h>
+
+#include <glm/glm.hpp>
+
+#include "ray_tracer.h"
 
 
 int main()
 {
-   ImageURGBA a;
    return 0;
 }

@@ -7,96 +7,8 @@
 #include <stb_image_write.h>
 #include <stb_image_resize.h>
 
+#include "pixel_traits.h"
 #include "string_utils.h"
-
-
-////////////////////////////////////////////////////////////////////////////////
-//Pixel types
-
-//Floating pixel types
-using FG    = float;       // Grey
-using FGA   = glm::vec2;   // Grey, Alpha
-using FRGB  = glm::vec3;   // Red, Green, Blue
-using FRGBA = glm::vec4;   // Red, Green, Blue, Alpha
-
-//Unsigned pixel types
-using UG    = uint32_t;                              // Grey
-using UGA   = glm::vec<2, uint8_t, glm::defaultp>;   // Grey, Alpha
-using URGB  = glm::vec<3, uint8_t, glm::defaultp>;   // Red, Green, Blue
-using URGBA = glm::vec<4, uint8_t, glm::defaultp>;   // Red, Green, Blue, Alpha
-
-
-template<class T>
-class PixelTrait
-{
-   static int            Size() { return sizeof(T); }
-   static stbir_datatype DataType() { return STBIR_MAX_TYPES; }
-   static int            NumChannels() { return 0; }
-};
-
-template<>
-class PixelTrait<FG>
-{
-   static int            Size() { return sizeof(FG); }
-   static stbir_datatype DataType() { return STBIR_TYPE_FLOAT; }
-   static int            NumChannels() { return 1; }
-};
-
-template<>
-class PixelTrait<FGA>
-{
-   static int            Size() { return sizeof(FGA); }
-   static stbir_datatype DataType() { return STBIR_TYPE_FLOAT; }
-   static int            NumChannels() { return 2; }
-};
-
-template<>
-class PixelTrait<FRGB>
-{
-   static int            Size() { return sizeof(FRGB); }
-   static stbir_datatype DataType() { return STBIR_TYPE_FLOAT; }
-   static int            NumChannels() { return 3; }
-};
-
-template<>
-class PixelTrait<FRGBA>
-{
-   static int            Size() { return sizeof(FRGBA); }
-   static stbir_datatype DataType() { return STBIR_TYPE_FLOAT; }
-   static int            NumChannels() { return 4; }
-};
-
-template<>
-class PixelTrait<UG>
-{
-   static int            Size() { return sizeof(UG); }
-   static stbir_datatype DataType() { return STBIR_TYPE_UINT8; }
-   static int            NumChannels() { return 1; }
-};
-
-template<>
-class PixelTrait<UGA>
-{
-   static int            Size() { return sizeof(UGA); }
-   static stbir_datatype DataType() { return STBIR_TYPE_UINT8; }
-   static int            NumChannels() { return 2; }
-};
-
-template<>
-class PixelTrait<URGB>
-{
-   static int            Size() { return sizeof(URGB); }
-   static stbir_datatype DataType() { return STBIR_TYPE_UINT8; }
-   static int            NumChannels() { return 3; }
-};
-
-template<>
-class PixelTrait<URGBA>
-{
-   static int            Size() { return sizeof(URGBA); }
-   static stbir_datatype DataType() { return STBIR_TYPE_UINT8; }
-   static int            NumChannels() { return 4; }
-};
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -110,8 +22,7 @@ public:
       m_Height(height),
       m_Data(nullptr)
    {
-      stbi_set_flip_vertically_on_load(1);
-      stbi_flip_vertically_on_write(1);
+      m_Data = malloc(m_Width * m_Height * PixelTraits<Pixel>::Size());
    }
 
    Image(const std::string& fileName)
@@ -130,7 +41,7 @@ public:
       m_Width = other.m_Width;
       m_Height = other.m_Height;
 
-      m_Data = STBI_MALLOC(other.DataSize());
+      m_Data = reinterpret_cast<unsigned char*>((other.DataSize()));
 
       for (int i = 0; i < other.PixelCount()) {
          m_Data[i] = other.m_Data[i];
@@ -149,7 +60,7 @@ public:
       if (this != &other) {
          m_Width = other.m_Width;
          m_Height = other.m_Height;
-         m_Data = STBI_MALLOC(other.DataSize());
+         m_Data = malloc(other.DataSize());
 
          for (int i = 0; i < other.PixelCount(); i++) {
             m_Data[i] = other.m_Data[i];
@@ -171,80 +82,81 @@ public:
    }
 
 
-   Pixel& operator[](int ind)       { return data[ind]; }
-   Pixel  operator[](int ind) const { return data[ind]; }
+   Pixel& operator[](int ind)       { return m_Data[ind]; }
+   Pixel  operator[](int ind) const { return m_Data[ind]; }
 
-   Pixel& operator()(int i, int j)       { return data[m_Width * i + j]; }
-   Pixel  operator()(int i, int j) const { return data[m_Width * i + j]; }
+   Pixel& operator()(int i, int j)       { return m_Data[m_Width * i + j]; }
+   Pixel  operator()(int i, int j) const { return m_Data[m_Width * i + j]; }
 
    bool Load(const std::string fileName)
    {
       int dummyPixelSize = 0;
-      m_Data = stbi_load(fileName.c_str(), &m_Width, &m_Height, dummyPixelSize, 0);
+      m_Data = stbi_load(fileName.c_str(), &m_Width, &m_Height, &dummyPixelSize, 0);
       
       return true;
    }
 
-   bool Write(const std::string fileName) const
+   bool Write(const std::string fileName, bool isHdr = false) const
    {
-      bool isWrittenSuccessfully = true;
+      bool isWrittenSuccessfully = false;
       std::string extension = GetExtension(fileName);
-      switch (extension)
-      {
-         case "png":
-         {
-            stbi_write_png(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data, m_Width * sizeof(Pixel));
-            break;
-         }
-         case "bmp":
-         {
-            stbi_write_bmp(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data);
-            break;
-         }
-         case "tga":
-         {
-            stbi_write_tga(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data);
-            break;
-         }
-         case "jpg":
-         {
-            stbi_write_jpg(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data);
-            break;
-         }
-         case "hdr":
-         {
-            stbi_write_hdr(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data);
-            break;
-         }
-         default:
-         {
-            isWrittenSuccessfully = false;
-         }
+      if (isHdr && PixelTraits<Pixel>::DataType() == STBIR_TYPE_FLOAT) {
+         stbi_write_hdr(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), reinterpret_cast<float*>(m_Data));
+         isWrittenSuccessfully = true;
+      } else if (extension == "png") {
+         stbi_write_png(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data, m_Width * sizeof(Pixel));
+         isWrittenSuccessfully = true;
+      } else if (extension == "bmp") {
+         stbi_write_bmp(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data);
+         isWrittenSuccessfully = true;
+      } else if (extension == "tga") {
+         stbi_write_tga(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data);
+         isWrittenSuccessfully = true;
+      } else if (extension == "jpg") {
+         stbi_write_jpg(fileName.c_str(), m_Width, m_Height, sizeof(Pixel), m_Data, 100);
+         isWrittenSuccessfully = true;
       }
 
       return isWrittenSuccessfully;
    }
 
-   bool Resize(int newWidth, int newHeight)
+   int Resize(int newWidth, int newHeight)
    {
-      unsigned char * newData = nullptr;
-      bool isSuccessful = stbir_resize(m_Data, m_Width, m_Height, m_Width * PixelTrait<Pixel>::Size(),
-         newData, newWidth, newHeight, newWidth * PixelTrait<Pixel>::Size(),
-         PixelTrait<Pixel>::DataType(), PixelTrait<Pixel>::NumChannels(), -1, 0,
-         STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP, STBIR_FILTER_DEFAULT, STBIR_FILTER_DEFAULT, STBIR_COLORSPACE_LINEAR, nullptr);
+      unsigned char * newData = reinterpret_cast<unsigned char*>(malloc(newWidth * newHeight * PixelTraits<Pixel>::Size()));
+      int success = 0;
+      if (PixelTraits<Pixel>::DataType() == STBIR_TYPE_UINT8) {
+         success = stbir_resize_uint8(m_Data, m_Width, m_Height, 0,
+            newData, newWidth, newHeight, 0,
+            PixelTraits<Pixel>::NumChannels());
+      } else if (PixelTraits<Pixel>::DataType() == STBIR_TYPE_FLOAT) {
+         success = stbir_resize_float(reinterpret_cast<float*>(m_Data), m_Width, m_Height, 0,
+            reinterpret_cast<float*>(newData), newWidth, newHeight, 0,
+            PixelTraits<Pixel>::NumChannels());
+      }
 
-      return isSuccessful;
+      if (success) {
+         m_Data = newData;
+         m_Width = newWidth;
+         m_Height = newHeight;
+      }
+
+      return success;
    }
+
+   void SetVerticalFlipOnLoad  (bool isFlip) const { stbi_set_flip_vertically_on_load(isFlip); }
+   void SetVerticalFlipOnWrite (bool isFlip) const { stbi_flip_vertically_on_write(isFlip); }
 
    int Width()      const { return m_Width; }
    int Height()     const { return m_Height; }
    int PixelCount() const { return m_Width * m_Height; }
    int DataSize()   const { return m_Width * m_Height * m_pixelSize; }
 private:
-   int   m_Width;
-   int   m_Height;
-   Pixel*   m_Data;
+   int              m_Width;
+   int              m_Height;
+   unsigned char*   m_Data;
 };
+
+#ifdef UTILS_USE_DEFAULT_PIXEL_TYPES
 
 using ImageFG = Image<FG>;
 using ImageFGA = Image<FGA>;
@@ -255,5 +167,7 @@ using ImageUG = Image<UG>;
 using ImageUGA = Image<UGA>;
 using ImageURGB = Image<URGB>;
 using ImageURGBA = Image<URGBA>;
+
+#endif
 
 #endif
