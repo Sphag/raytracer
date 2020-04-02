@@ -2,6 +2,13 @@
 *.gch
 *.pch
 
+# Images
+*.png
+*.bmp
+*.tga
+*.jpg
+*.jpeg
+
 # Binaries and generated stuff
 generated/
 build/
