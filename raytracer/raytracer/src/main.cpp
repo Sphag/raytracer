@@ -10,6 +10,8 @@
 
 int main()
 {
-   RayTracer::Init();
+   RayTracer::Init(200, 100);
+   auto image = RayTracer::Render();
+   image.Write("render.png");
    return 0;
 }

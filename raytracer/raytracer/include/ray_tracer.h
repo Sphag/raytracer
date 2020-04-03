@@ -1,22 +1,21 @@
-#pragma once
 #ifndef __RAY_TRACER_H_INCLUDED
 #define __RAY_TRACER_H_INCLUDED
 
-#include <utils/Image.h>
-#include <utils/pixel_traits.h>
+#include <utils/image.h>
+#include <glm/glm.hpp>
+
+#include "ray.h"
 
 
 class RayTracer
 {
 public:
-   
-   static void Init();
-   static void SetDefaultParameters();
-   static ImageFRGBA Render();
+   static void Init(int width, int height);
+   static ImageURGBA Render();
 private:
-   static struct
-   {
-   } m_Parameters;
+   static FRGBA ColorRay(const Ray& ray);
+   static int m_Width;
+   static int m_Height;
 };
 
 #endif
