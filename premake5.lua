@@ -18,11 +18,13 @@ workspace "raytracer"
 	-- We now only set settings for the Debug configuration
 	filter { "configurations:Debug" }
 		-- We want debug symbols in our debug config
+		defines "RT_DEBUG"
 		symbols "On"
 	
 	-- We now only set settings for Release
 	filter { "configurations:Release" }
 		-- Release should be optimized
+		defines "RT_RELEASE"
 		optimize "On"
 	
 	-- Reset the filter for other settings
@@ -42,7 +44,13 @@ workspace "raytracer"
     kind "ConsoleApp"
     language "C++"
 	cppdialect "C++17"
-    
+	staticruntime "on"
+
+	pchheader "rtpch.h"
+	pchsource "raytracer/raytracer/src/rtpch.cpp"
+
+	src_path = "raytracer/%{prj.name}/src/"
+	  
     files
 	{
 		"raytracer/%{prj.name}/include/**.h",
@@ -51,7 +59,7 @@ workspace "raytracer"
 		"raytracer/vendor/glm/glm/**.inl",
 		"raytracer/vendor/stb_image/**.h",
 		"raytracer/vendor/stb_image/**.cpp"
-	}
+	}	
 
 	defines
 	{
@@ -65,3 +73,7 @@ workspace "raytracer"
 		"raytracer/vendor/glm",
 		"raytracer/vendor/stb_image/",
 	}
+
+	
+	filter {"files:raytracer/vendor/stb_image/**.cpp"}
+		flags {"NoPCH"}

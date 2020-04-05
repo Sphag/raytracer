@@ -2,6 +2,7 @@
 #ifndef __IMAGE_H_INCLUDED
 #define __IMAGE_H_INCLUDED
 
+#include "rtpch.h"
 #include <glm/glm.hpp>
 #include <stb_image.h>
 #include <stb_image_write.h>

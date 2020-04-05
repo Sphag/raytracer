@@ -2,9 +2,7 @@
 #ifndef __STRING_UTILS_H_INCLUDED
 #define __STRING_UTILS_H_INCLUDED
 
-#include <string>
-#include <algorithm>
-
+#include "rtpch.h"
 
 std::string GetExtension(const std::string& fileName);
 

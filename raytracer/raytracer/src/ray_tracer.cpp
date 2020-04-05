@@ -1,12 +1,14 @@
-#include <glm/glm.hpp>
-#include <glm/gtx/compatibility.hpp>
+#include "rtpch.h"
+
 #include "image.h"
 
 #include "ray_tracer.h"
 #include "ray.h"
+#include "sphere.h"
 
 int RayTracer::m_Width;
 int RayTracer::m_Height;
+Sphere RayTracer::m_Sphere = Sphere(glm::vec3(0.0f, 0.0f, -1.0f), 0.5f);
 
 void RayTracer::Init(int width, int height)
 {
@@ -38,7 +40,11 @@ ImageURGBA RayTracer::Render()
 
 FRGBA RayTracer::ColorRay(const Ray& ray)
 {
+   float t = 0.0f;
+   if (m_Sphere.Hit(ray, t)) {
+      return FRGBA(1.0f, 0.0f, 0.0f, 1.0f);
+   }
    glm::vec3 unitDirection = glm::normalize(ray.Direction());
-   float t = 0.5f * (unitDirection.y + 1.0f);
+   t = 0.5f * (unitDirection.y + 1.0f);
    return glm::lerp(FRGBA(0.5f, 0.7f, 1.0f, 1.0f), FRGBA(1.0f), t);
 }

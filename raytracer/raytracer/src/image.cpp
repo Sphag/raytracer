@@ -1,3 +1,4 @@
+#include "rtpch.h"
 #include "image.h"
 
 
@@ -9,10 +10,10 @@ ImageURGBA ToURGBA(const ImageFRGBA& image)
 
    for (int i = 0; i < image.Height(); i++) {
       for (int j = 0; j < image.Width(); j++) {
-         out(i, j).r = image(i, j).r * 255.999;
-         out(i, j).g = image(i, j).g * 255.999;
-         out(i, j).b = image(i, j).b * 255.999;
-         out(i, j).a = image(i, j).a * 255.999;
+         out(i, j).r = (uint8_t)(image(i, j).r * 255.999);
+         out(i, j).g = (uint8_t)(image(i, j).g * 255.999);
+         out(i, j).b = (uint8_t)(image(i, j).b * 255.999);
+         out(i, j).a = (uint8_t)(image(i, j).a * 255.999);
       }
    }
 
