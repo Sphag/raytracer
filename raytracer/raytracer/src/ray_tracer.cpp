@@ -1,6 +1,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/compatibility.hpp>
-#include <utils/image.h>
+#include "image.h"
 
 #include "ray_tracer.h"
 #include "ray.h"

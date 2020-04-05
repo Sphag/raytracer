@@ -59,45 +59,9 @@ workspace "raytracer"
 		"UTILS_USE_DEFAULT_PIXEL_TYPES"
 	}
 
-	links
-	{
-		"utils"
-	}
-
 	includedirs
 	{
 		"raytracer/%{prj.name}/include",
-		"raytracer/utils/include/",
 		"raytracer/vendor/glm",
 		"raytracer/vendor/stb_image/",
-	}
-
-	project "utils"
-
-    location "raytracer/utils"
-    kind "StaticLib"
-    language "C++"
-	cppdialect "C++17"
-    
-    files
-	{
-		"raytracer/utils/include/utils/**.h",
-		"raytracer/utils/src/**.cpp",
-		"raytracer/vendor/stb_image/**.h",
-		"raytracer/vendor/stb_image/**.cpp",
-		"raytracer/vendor/glm/glm/**.hpp",
-		"raytracer/vendor/glm/glm/**.inl"
-	}
-
-	defines
-	{
-		"_CRT_SECURE_NO_WARNINGS",
-		"UTILS_USE_DEFAULT_PIXEL_TYPES"
-	}
-
-	includedirs
-	{
-		"raytracer/%{prj.name}/include/utils",
-		"raytracer/vendor/stb_image/",
-		"raytracer/vendor/glm",
 	}

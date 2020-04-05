@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include <utils/image.h>
-#include <utils/string_utils.h>
+#include "image.h"
+#include "string_utils.h"
 
 #include <glm/glm.hpp>
 
@@ -11,7 +11,12 @@
 int main()
 {
    RayTracer::Init(200, 100);
-   auto image = RayTracer::Render();
-   image.Write("render.png");
+   ImageURGBA img(400, 200);
+   img(0, 0).r = 255;
+   img(0, 0).g = 0;
+   img(0, 0).b = 0;
+   img(0, 0).a = 255;
+   //auto image = RayTracer::Render();
+   img.Write("render.png");
    return 0;
 }

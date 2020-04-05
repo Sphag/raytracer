@@ -1,7 +1,7 @@
 #ifndef __RAY_TRACER_H_INCLUDED
 #define __RAY_TRACER_H_INCLUDED
 
-#include <utils/image.h>
+#include "image.h"
 #include <glm/glm.hpp>
 
 #include "ray.h"
