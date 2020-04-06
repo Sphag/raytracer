@@ -48,8 +48,6 @@ workspace "raytracer"
 
 	pchheader "rtpch.h"
 	pchsource "raytracer/raytracer/src/rtpch.cpp"
-
-	src_path = "raytracer/%{prj.name}/src/"
 	  
     files
 	{

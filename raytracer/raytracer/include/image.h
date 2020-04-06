@@ -25,6 +25,8 @@ public:
       m_Height(height),
       m_Data(nullptr)
    {
+      stbi_set_flip_vertically_on_load(1);
+      stbi_flip_vertically_on_write(1);
       m_Data = reinterpret_cast<unsigned char*>(malloc(m_Width * m_Height * sizeof(Pixel)));
    }
 

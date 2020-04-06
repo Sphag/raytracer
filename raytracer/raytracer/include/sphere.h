@@ -15,7 +15,7 @@ public:
    Sphere& operator=(const Sphere& other) = default;
    Sphere& operator=(Sphere&& other) = default;
 
-   bool Hit(const Ray& ray, float& t) const override;
+   bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
 
    glm::vec3 GetCenter() const { return m_Center; }
    float     GetRadius() const { return m_Radius; }

@@ -8,7 +8,7 @@ class BaseHittable
 {
 public:
    virtual ~BaseHittable() {}
-   virtual bool Hit(const Ray& ray, float& t) const = 0;
+   virtual bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const = 0;
 };
 
 #endif

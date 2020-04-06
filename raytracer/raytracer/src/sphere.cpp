@@ -3,7 +3,7 @@
 #include "sphere.h"
 
 
-bool Sphere::Hit(const Ray& ray, float& t) const
+bool Sphere::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
 {
    glm::vec3 oc = ray.Origin() - m_Center;
    float a = glm::dot(ray.Direction(), ray.Direction());
@@ -16,7 +16,22 @@ bool Sphere::Hit(const Ray& ray, float& t) const
       return false;
    }
 
-   t = (-b - glm::sqrt(discriminant)) / (2.0f * a);
+   float t1 = (-b - glm::sqrt(discriminant)) / (2.0f * a);
 
-   return true;
+   if (t1 >= minDist && t1 <= maxDist) {
+      hitInfo.hitPoint = ray.At(t1);
+      hitInfo.t = t1;
+      hitInfo.normal = glm::normalize(hitInfo.hitPoint - m_Center);
+      return true;
+   }
+
+   float t2 = (-b + glm::sqrt(discriminant)) / (2.0f * a);
+   if (t2 >= minDist && t2 <= maxDist) {
+      hitInfo.hitPoint = ray.At(t2);
+      hitInfo.t = t2;
+      hitInfo.normal = glm::normalize(hitInfo.hitPoint - m_Center);
+      return true;
+   }
+
+   return false;
 }

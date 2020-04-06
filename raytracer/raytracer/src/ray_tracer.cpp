@@ -8,12 +8,17 @@
 
 int RayTracer::m_Width;
 int RayTracer::m_Height;
-Sphere RayTracer::m_Sphere = Sphere(glm::vec3(0.0f, 0.0f, -1.0f), 0.5f);
+std::shared_ptr<HittableList> RayTracer::m_HittableList;
 
 void RayTracer::Init(int width, int height)
 {
    m_Width = width;
    m_Height = height;
+}
+
+void RayTracer::SetScene(std::shared_ptr<HittableList> hittableList)
+{
+   m_HittableList = hittableList;
 }
 
 ImageURGBA RayTracer::Render()
@@ -40,11 +45,11 @@ ImageURGBA RayTracer::Render()
 
 FRGBA RayTracer::ColorRay(const Ray& ray)
 {
-   float t = 0.0f;
-   if (m_Sphere.Hit(ray, t)) {
-      return FRGBA(1.0f, 0.0f, 0.0f, 1.0f);
+   HitInfo hitInfo;
+   if (m_HittableList->Hit(ray, 0, INFINITY, hitInfo)) {
+      return FRGBA(0.5f * (hitInfo.normal + glm::vec3(1, 1, 1)), 1.0f);
    }
    glm::vec3 unitDirection = glm::normalize(ray.Direction());
-   t = 0.5f * (unitDirection.y + 1.0f);
-   return glm::lerp(FRGBA(0.5f, 0.7f, 1.0f, 1.0f), FRGBA(1.0f), t);
+   float t = 0.5f * (unitDirection.y + 1.0f);
+   return glm::lerp(FRGBA(1.0f), FRGBA(0.5f, 0.7f, 1.0f, 1.0f), t);
 }

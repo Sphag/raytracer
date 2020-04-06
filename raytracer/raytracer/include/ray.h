@@ -4,6 +4,12 @@
 
 #include <glm/glm.hpp>
 
+struct HitInfo
+{
+   glm::vec3 hitPoint;
+   glm::vec3 normal;
+   float t;
+};
 
 class Ray
 {
