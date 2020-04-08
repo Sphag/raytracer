@@ -6,11 +6,13 @@
 #include "ray.h"
 #include "sphere.h"
 
-int RayTracer::m_Width;
-int RayTracer::m_Height;
+// RayTracer static members
+int                           RayTracer::m_Width;
+int                           RayTracer::m_Height;
 std::shared_ptr<HittableList> RayTracer::m_HittableList;
-int RayTracer::m_SPP;
-Camera RayTracer::m_Camera;
+int                           RayTracer::m_SPP;
+std::shared_ptr<Camera>       RayTracer::m_Camera;
+
 
 void RayTracer::Init(int width, int height)
 {
@@ -23,13 +25,14 @@ void RayTracer::SetScene(std::shared_ptr<HittableList> hittableList)
    m_HittableList = hittableList;
 }
 
-void RayTracer::SetCamera(const Camera& camera)
+void RayTracer::SetCamera(std::shared_ptr<Camera> camera)
 {
    m_Camera = camera;
 }
 
 void RayTracer::SetSSRate(int samplesPerPixel)
 {
+   RT_ASSERT(samplesPerPixel != 0);
    m_SPP = samplesPerPixel;
 }
 
@@ -44,7 +47,7 @@ ImageURGBA RayTracer::Render()
          for (int k = 0; k < m_SPP; k++) {
             float v = glm::lerp(-1.0f, 1.0f, float(i + RT_RandomFloat()) / image.Height());
             float u = glm::lerp(-1.0f, 1.0f, float(j + RT_RandomFloat()) / image.Width());
-            Ray ray = m_Camera.GetRay(u, v);
+            Ray ray = m_Camera->GetRay(u, v);
             color += ColorRay(ray);
          }
 
@@ -59,7 +62,7 @@ ImageURGBA RayTracer::Render()
 FRGBA RayTracer::ColorRay(const Ray& ray)
 {
    HitInfo hitInfo;
-   if (m_HittableList->Hit(ray, 0, INFINITY, hitInfo)) {
+   if (m_HittableList->Hit(ray, RT_FloatEpsilon, RT_FloatInfinity, hitInfo)) {
       return FRGBA(0.5f * (hitInfo.normal + glm::vec3(1, 1, 1)), 1.0f);
    }
    glm::vec3 unitDirection = glm::normalize(ray.Direction());
