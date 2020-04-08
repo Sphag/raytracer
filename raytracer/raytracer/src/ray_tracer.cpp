@@ -35,19 +35,20 @@ void RayTracer::SetSSRate(int samplesPerPixel)
 
 ImageURGBA RayTracer::Render()
 {
+   RT_ASSERT(RT_FloatEquals((float)m_Width / m_Height, m_Camera.GetAspectRatio()));
    ImageFRGBA image(m_Width, m_Height);
 
    for (int i = 0; i < image.Height(); i++) {
       for (int j = 0; j < image.Width(); j++) {
          FRGBA color(0.0f);
          for (int k = 0; k < m_SPP; k++) {
-            float v = float(i + RandomFloat()) / image.Height();
-            float u = float(j + RandomFloat()) / image.Width();
+            float v = glm::lerp(-1.0f, 1.0f, float(i + RT_RandomFloat()) / image.Height());
+            float u = glm::lerp(-1.0f, 1.0f, float(j + RT_RandomFloat()) / image.Width());
             Ray ray = m_Camera.GetRay(u, v);
             color += ColorRay(ray);
          }
 
-         color /= m_SPP;
+         color /= (float)m_SPP;
          image(i, j) = color;
       }
    }
