@@ -2,8 +2,6 @@
 #ifndef __HITTABLE_LIST_H_INCLUDED
 #define __HITTABLE_LIST_H_INCLUDED
 
-//#include "rtpch.h"
-
 #include "base_hittable.h"
 
 

@@ -14,6 +14,7 @@
 // Vendor
 ////////////////////////////////////////////////////////////////////////////////
 #include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 #include <glm/gtx/compatibility.hpp>
 
 #include <stb_image.h>

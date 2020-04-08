@@ -43,8 +43,6 @@ class PixelTypeHolder {};
 
 ////////////////////////////////////////////////////////////////////////////////
 // Registration of pixel types
-// Note:
-// !!! Must be done before including image.h !!!
 
 #define REGISTER_PIXEL_TYPE(name, type, dataType, numChannels)     \
 typedef type name;                                                 \

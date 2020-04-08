@@ -1,7 +1,6 @@
 #ifndef __SPHERE__H_INCLUDED
 #define __SPHERE__H_INCLUDED
 
-#include "rtpch.h"
 #include "base_hittable.h"
 
 

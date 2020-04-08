@@ -13,6 +13,9 @@ int main()
    hittableList->Add(std::make_shared<Sphere>(glm::vec3(0, -100.5, -1), 100));
    RayTracer::Init(200, 100);
    RayTracer::SetScene(hittableList);
+   Camera cam;
+   RayTracer::SetSSRate(100);
+   RayTracer::SetCamera(cam);
    auto image = RayTracer::Render();
    image.Write("render.png");
    return 0;
