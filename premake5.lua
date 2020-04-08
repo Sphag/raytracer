@@ -57,7 +57,7 @@ workspace "raytracer"
 		"raytracer/vendor/glm/glm/**.inl",
 		"raytracer/vendor/stb_image/**.h",
 		"raytracer/vendor/stb_image/**.cpp"
-	}	
+	}
 
 	defines
 	{

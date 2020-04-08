@@ -1,9 +1,31 @@
 #ifndef __CORE_H_INCLUDED
 #define __CORE_H_INCLUDED
 
-#define RT_RandomFloat() glm::linearRand(0.0f, 1.0f)
+#define RT_RandomFloatRange(x,y) glm::linearRand(x, y)
+#define RT_RandomFloat()         RT_RandomFloatRange(0.0f, 1.0f)
+#define RT_RandomUnitSphere()    glm::sphericalRand(1.0f)
+#define RT_FloatEquals(x,y)      (glm::abs((x) - (y)) < glm::epsilon<float>())
+#define RT_FloatEpsilon          glm::epsilon<float>()
+#define RT_FloatInfinity         INFINITY
+#define RT_FloatPi               glm::pi<float>()
 
-#define RT_FloatEquals(x,y) (glm::abs((x) - (y)) < glm::epsilon<float>())
+#ifdef UTILS_USE_DEFAULT_PIXEL_TYPES
+
+#define RT_FBLACK FRGBA(0.0f, 0.0f, 0.0f, 1.0f)
+#define RT_FWHITE FRGBA(1.0f, 1.0f, 1.0f, 1.0f)
+#define RT_FRED   FRGBA(1.0f, 0.0f, 0.0f, 1.0f)
+#define RT_FGREEN FRGBA(0.0f, 1.0f, 0.0f, 1.0f)
+#define RT_FBLUE  FRGBA(0.0f, 0.0f, 1.0f, 1.0f)
+
+#else
+
+#define RT_FBLACK
+#define RT_FWHITE
+#define RT_FRED  
+#define RT_FGREEN
+#define RT_FBLUE 
+
+#endif
 
 #ifdef RT_DEBUG
 

@@ -20,3 +20,12 @@ ImageURGBA ToURGBA(const ImageFRGBA& image)
 }
 
 #endif
+
+void GammaCorrect(ImageFRGBA& image, float gamma)
+{
+   for (int i = 0; i < image.Height(); i++) {
+      for (int j = 0; j < image.Width(); j++) {
+         image(i, j) = glm::pow(image(i, j), FRGBA(glm::vec3(1 / gamma), 1.0f));
+      }
+   }
+}

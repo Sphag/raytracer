@@ -17,11 +17,12 @@ bool Sphere::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo)
    }
 
    float t1 = (-b - glm::sqrt(discriminant)) / (2.0f * a);
-
+   RT_ASSERT(m_Material);
    if (t1 >= minDist && t1 <= maxDist) {
       hitInfo.hitPoint = ray.At(t1);
       hitInfo.t = t1;
       hitInfo.normal = glm::normalize(hitInfo.hitPoint - m_Center);
+      hitInfo.material = m_Material;
       return true;
    }
 
@@ -30,6 +31,7 @@ bool Sphere::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo)
       hitInfo.hitPoint = ray.At(t2);
       hitInfo.t = t2;
       hitInfo.normal = glm::normalize(hitInfo.hitPoint - m_Center);
+      hitInfo.material = m_Material;
       return true;
    }
 

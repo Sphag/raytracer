@@ -4,12 +4,8 @@
 
 #include <glm/glm.hpp>
 
-struct HitInfo
-{
-   glm::vec3 hitPoint;
-   glm::vec3 normal;
-   float t;
-};
+class BaseMaterial;
+
 
 class Ray
 {
@@ -24,6 +20,22 @@ public:
 private:
    glm::vec3 m_Origin;
    glm::vec3 m_Direction;
+};
+
+
+struct HitInfo
+{
+   glm::vec3 hitPoint;
+   glm::vec3 normal;
+   std::shared_ptr<BaseMaterial> material;
+   float t;
+   bool isFrontFace;
+
+   inline void SetFaceNormal(const Ray& ray, const glm::vec3& outwardNormal)
+   {
+      isFrontFace = glm::dot(ray.Direction(), outwardNormal) < 0;
+      normal = isFrontFace ? outwardNormal : -outwardNormal;
+   }
 };
 
 #endif

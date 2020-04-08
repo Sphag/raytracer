@@ -160,6 +160,8 @@ using ImageURGBA = Image<URGBA>;
 
 ImageURGBA ToURGBA(const ImageFRGBA& image);
 
-#endif
+#endif 
+
+void GammaCorrect(ImageFRGBA& image, float gamma);
 
 #endif
