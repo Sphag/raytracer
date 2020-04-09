@@ -3,6 +3,7 @@
 
 #define RT_RandomFloatRange(x,y) glm::linearRand(x, y)
 #define RT_RandomFloat()         RT_RandomFloatRange(0.0f, 1.0f)
+#define RT_RandomBool()          glm::linearRand(0, 1)
 #define RT_RandomUnitSphere()    glm::sphericalRand(1.0f)
 #define RT_FloatEquals(x,y)      (glm::abs((x) - (y)) < glm::epsilon<float>())
 #define RT_FloatEpsilon          glm::epsilon<float>()
@@ -11,11 +12,12 @@
 
 #ifdef UTILS_USE_DEFAULT_PIXEL_TYPES
 
-#define RT_FBLACK FRGBA(0.0f, 0.0f, 0.0f, 1.0f)
-#define RT_FWHITE FRGBA(1.0f, 1.0f, 1.0f, 1.0f)
-#define RT_FRED   FRGBA(1.0f, 0.0f, 0.0f, 1.0f)
-#define RT_FGREEN FRGBA(0.0f, 1.0f, 0.0f, 1.0f)
-#define RT_FBLUE  FRGBA(0.0f, 0.0f, 1.0f, 1.0f)
+#define RT_FBLACK        FRGBA(0.0f, 0.0f, 0.0f, 1.0f)
+#define RT_FWHITE        FRGBA(1.0f, 1.0f, 1.0f, 1.0f)
+#define RT_FRED          FRGBA(1.0f, 0.0f, 0.0f, 1.0f)
+#define RT_FGREEN        FRGBA(0.0f, 1.0f, 0.0f, 1.0f)
+#define RT_FBLUE         FRGBA(0.0f, 0.0f, 1.0f, 1.0f)
+#define RT_FINVALIDCOLOR FRGBA(-1.0f, -1.0f, -1.0f, -1.0f)
 
 #else
 
@@ -29,7 +31,7 @@
 
 #ifdef RT_DEBUG
 
-#define RT_ASSERT(cond) do { __debugbreak(); assert((cond)); }while(0)
+#define RT_ASSERT(cond) while(!(cond)){ __debugbreak(); assert((cond)); }
 
 #else
 

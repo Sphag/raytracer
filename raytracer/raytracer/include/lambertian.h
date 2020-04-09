@@ -8,9 +8,11 @@
 class Lambertian : public BaseMaterial
 {
 public:
-   Lambertian(const FRGBA& albedo) : m_Albedo(albedo) {}
-   bool Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenuation, Ray& scattered) const override;
+   Lambertian(const FRGBA& albedo) : m_Albedo(albedo) { s_MaterialType = MATERIAL_TYPE::LAMBERTIAN; }
+   bool  Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenuation, std::vector<Ray>& scattered) const override;
+   MATERIAL_TYPE GetMaterialType() const override { return s_MaterialType; }
 private:
+   static MATERIAL_TYPE s_MaterialType;
    FRGBA m_Albedo;
 };
 

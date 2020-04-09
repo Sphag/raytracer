@@ -50,7 +50,7 @@ void RayTracer::SetBounceDepth(uint32_t bounceDepth)
 
 ImageURGBA RayTracer::Render()
 {
-   RT_ASSERT(RT_FloatEquals((float)s_Width / s_Height, s_Camera.GetAspectRatio()));
+   RT_ASSERT(RT_FloatEquals((float)s_Width / s_Height, s_Camera->GetAspectRatio()));
    ImageFRGBA image(s_Width, s_Height);
    uint32_t totalPixels = image.PixelCount();
    uint32_t p = 0;
@@ -59,8 +59,8 @@ ImageURGBA RayTracer::Render()
       for (int j = 0; j < image.Width(); j++) {
          FRGBA color(0.0f);
          for (int k = 0; k < s_SPP; k++) {
-            float v = glm::lerp(-1.0f, 1.0f, float(i + RT_RandomFloat()) / image.Height());
-            float u = glm::lerp(-1.0f, 1.0f, float(j + RT_RandomFloat()) / image.Width());
+            float v = float(i + RT_RandomFloat()) / image.Height();
+            float u = float(j + RT_RandomFloat()) / image.Width();
             Ray ray = s_Camera->GetRay(u, v);
             color += ColorRay(ray, s_Depth);
          }
@@ -88,14 +88,41 @@ FRGBA RayTracer::ColorRay(const Ray& ray, uint32_t depth)
    }
 
    if (s_HittableList->Hit(ray, RT_FloatEpsilon, RT_FloatInfinity, hitInfo)) {
-      Ray scattered;
+      std::vector<Ray> scattered;
       FRGBA attenuation;
       if (hitInfo.material->Scatter(ray, hitInfo, attenuation, scattered)) {
-         return attenuation * ColorRay(scattered, depth - 1);
+         RT_ASSERT(scattered.size() != 0);
+               return attenuation * ColorRay(scattered[0], depth - 1);
+         volatile MATERIAL_TYPE materialType = hitInfo.material->GetMaterialType();
+         switch (materialType) {
+            case MATERIAL_TYPE::LAMBERTIAN:
+            case MATERIAL_TYPE::METALIC:
+               return attenuation * ColorRay(scattered[0], depth - 1);
+            case MATERIAL_TYPE::DIELECTRIC:
+               return attenuation * ColorRay(scattered[0], depth - 1);
+#if 0
+            {
+               if (scattered.size() > 1) {
+                  FRGBA refractedColor = ColorRay(scattered[1], depth - 1);
+                  FRGBA reflectedColor = ColorRay(scattered[0], depth - 1);
+                  return attenuation * (refractedColor + reflectedColor) / 2.0f;
+               } else {
+                  return attenuation * ColorRay(scattered[0], depth - 1);
+               }
+            }
+#endif
+            case MATERIAL_TYPE::UNKNOWN:
+            {
+               MATERIAL_TYPE m = hitInfo.material->GetMaterialType();
+               RT_ASSERT(false);
+               return RT_FBLACK;
+            }
+         }
+      } else {
+         return RT_FBLACK;
       }
-
-      return RT_FBLACK;
    }
+
    glm::vec3 unitDirection = glm::normalize(ray.Direction());
    float t = 0.5f * (unitDirection.y + 1.0f);
    return glm::lerp(FRGBA(1.0f), FRGBA(0.5f, 0.7f, 1.0f, 1.0f), t);
