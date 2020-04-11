@@ -23,6 +23,7 @@ public:
       auto halfHeight = glm::tan(glm::radians(fov) / 2);
       auto halfWidth = aspectRatio * halfHeight;
       w = glm::normalize(origin - eye);
+      auto a = glm::cross(up, w);
       u = glm::normalize(glm::cross(up, w));
       v = glm::cross(w, u);
 

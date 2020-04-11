@@ -9,6 +9,9 @@
 *.jpg
 *.jpeg
 
+# Models
+*.obj
+
 # Binaries and generated stuff
 generated/
 build/

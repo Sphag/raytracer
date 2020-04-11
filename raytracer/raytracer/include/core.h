@@ -1,6 +1,8 @@
 #ifndef __CORE_H_INCLUDED
 #define __CORE_H_INCLUDED
 
+#define NOMINMAX
+
 #define RT_RandomFloatRange(x,y) glm::linearRand(x, y)
 #define RT_RandomFloat()         RT_RandomFloatRange(0.0f, 1.0f)
 #define RT_RandomBool()          glm::linearRand(0, 1)
@@ -9,6 +11,7 @@
 #define RT_FloatEpsilon          glm::epsilon<float>()
 #define RT_FloatInfinity         INFINITY
 #define RT_FloatPi               glm::pi<float>()
+#define RT_GetNormal(x, y)       glm::normalize(glm::cross(x, y))
 
 #ifdef UTILS_USE_DEFAULT_PIXEL_TYPES
 

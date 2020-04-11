@@ -10,6 +10,9 @@
 #include <vector>
 #include <climits>
 #include <memory>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Vendor
@@ -27,5 +30,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "pixel_traits.h"
 #include "core.h"
+
+#ifdef RT_DEBUG
+#include "Windows.h"
+#endif
 
 #endif
