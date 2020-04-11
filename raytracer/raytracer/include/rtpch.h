@@ -25,11 +25,13 @@
 #include <stb_image_write.h>
 #include <stb_image_resize.h>
 
+#include <cds/init.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 // Core or platform specific stuff
 ////////////////////////////////////////////////////////////////////////////////
-#include "pixel_traits.h"
-#include "core.h"
+#include "core/pixel_traits.h"
+#include "core/core.h"
 
 #ifdef RT_DEBUG
 #include "Windows.h"

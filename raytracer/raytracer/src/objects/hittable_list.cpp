@@ -1,7 +1,7 @@
 #include "rtpch.h"
-#include "hittable_list.h"
-#include "ray.h"
-#include "sphere.h"
+#include "objects/hittable_list.h"
+#include "core/ray.h"
+#include "objects/sphere.h"
 
 bool HittableList::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
 {

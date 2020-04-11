@@ -1,5 +1,5 @@
 #include "rtpch.h"
-#include "model.h"
+#include "objects/model.h"
 
 
 bool Model::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const

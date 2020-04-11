@@ -1,6 +1,6 @@
 #include "rtpch.h"
 
-#include "sphere.h"
+#include "objects/sphere.h"
 
 
 bool Sphere::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const

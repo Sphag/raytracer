@@ -1,5 +1,5 @@
 #include "rtpch.h"
-#include "plane.h"
+#include "objects/plane.h"
 
 
 bool Plane::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
@@ -9,14 +9,15 @@ bool Plane::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
       return false;
    }
 
-   float t = glm::dot(ray.Origin() - m_Offset, m_Normal) / denominator;
+   float t = glm::dot(ray.Origin() + m_Offset, m_Normal) / denominator;
    if (t >= minDist && t <= maxDist) {
       hitInfo.t = t;
       hitInfo.SetFaceNormal(ray, m_Normal);
       hitInfo.hitPoint = ray.At(t);
       hitInfo.material = m_Material;
+      return true;
    }
 
-   return true;
+   return false;
 }
 

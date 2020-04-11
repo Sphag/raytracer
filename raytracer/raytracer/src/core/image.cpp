@@ -1,5 +1,5 @@
 #include "rtpch.h"
-#include "image.h"
+#include "core/image.h"
 
 
 #ifdef UTILS_USE_DEFAULT_PIXEL_TYPES

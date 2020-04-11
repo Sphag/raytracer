@@ -1,6 +1,6 @@
 #include "rtpch.h"
-#include "metalic.h"
-#include "math_utils.h"
+#include "materials/metalic.h"
+#include "core/math_utils.h"
 
 
 bool Metalic::Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenuation, std::vector<Ray>& scattered) const

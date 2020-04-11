@@ -3,11 +3,11 @@
 
 #include "rtpch.h"
 
-#include "image.h"
-#include "sphere.h"
-#include "ray.h"
-#include "hittable_list.h"
-#include "camera.h"
+#include "core/image.h"
+#include "objects/sphere.h"
+#include "core/ray.h"
+#include "objects/hittable_list.h"
+#include "core/camera.h"
 
 
 class RayTracer

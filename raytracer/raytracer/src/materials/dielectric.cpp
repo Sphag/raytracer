@@ -1,5 +1,5 @@
 #include "rtpch.h"
-#include "dielectric.h"
+#include "materials/dielectric.h"
 
 
 bool Dielectric::Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenuation, std::vector<Ray>& scattered) const

@@ -1,10 +1,10 @@
 #include "rtpch.h"
 
-#include "image.h"
+#include "core/image.h"
 
-#include "ray_tracer.h"
-#include "ray.h"
-#include "sphere.h"
+#include "ray_tracer/ray_tracer.h"
+#include "core/ray.h"
+#include "objects/sphere.h"
 
 // RayTracer static members
 int                           RayTracer::s_Width = 200;

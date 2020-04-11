@@ -1,6 +1,6 @@
 #include "rtpch.h"
-#include "lambertian.h"
-#include "math_utils.h"
+#include "materials/lambertian.h"
+#include "core/math_utils.h"
 
 
 bool Lambertian::Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenuation, std::vector<Ray>& scattered) const

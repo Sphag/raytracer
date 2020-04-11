@@ -6,8 +6,8 @@
 
 #include <glm/glm.hpp>
 
-#include "base_hittable.h"
-#include "base_material.h"
+#include "objects/base_hittable.h"
+#include "materials/base_material.h"
 #include "triangle.h"
 
 

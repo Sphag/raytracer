@@ -1,5 +1,5 @@
 #include "rtpch.h"
-#include "triangle.h"
+#include "objects/triangle.h"
 
 
 bool Triangle::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
