@@ -21,3 +21,8 @@ bool Triangle::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInf
    return false;
 }
 
+Plane Triangle::GetPlane() const
+{
+   return Plane(glm::normalize(m_Normal), m_A, m_Material);
+}
+
