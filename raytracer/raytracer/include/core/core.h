@@ -13,6 +13,12 @@
 #define RT_FloatPi               glm::pi<float>()
 #define RT_GetNormal(x, y)       glm::normalize(glm::cross(x, y))
 
+#define RT_Float3UnitX           glm::vec3(1.0f, 0.0f, 0.0f)
+#define RT_Float3UnitY           glm::vec3(0.0f, 1.0f, 0.0f)
+#define RT_Float3UnitZ           glm::vec3(0.0f, 0.0f, 1.0f)
+#define RT_Float3Zero            glm::vec3(0.0f)
+#define RT_Float3One             glm::vec3(1.0f)
+
 #ifdef UTILS_USE_DEFAULT_PIXEL_TYPES
 
 #define RT_FBLACK        FRGBA(0.0f, 0.0f, 0.0f, 1.0f)

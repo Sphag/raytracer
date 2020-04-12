@@ -27,29 +27,58 @@ bool AABB::Hit(const Ray& ray, float minDist, float maxDist) const
 
 bool AABB::Intersects(const Plane& plane) const
 {
-   glm::vec3 verts[8] = {
-      m_MinVert,
-      m_MinVert + glm::vec3(m_MaxVert.x, 0.0f, 0.0f),
-      m_MinVert + glm::vec3(m_MaxVert.x, m_MaxVert.y, 0.0f),
-      m_MinVert + glm::vec3(0.0f, m_MaxVert.y, 0.0f),
-      m_MinVert + glm::vec3(0.0f, 0.0f, m_MaxVert.z),
-      m_MinVert + glm::vec3(m_MaxVert.x, 0.0f, m_MaxVert.z),
-      m_MinVert + glm::vec3(0.0f, m_MaxVert.y, m_MaxVert.z),
-      m_MaxVert
+   glm::vec3 mid = (m_MaxVert + m_MinVert) * 0.5f;
+   glm::vec3 ext = m_MaxVert - mid;
+
+
+   float r = glm::abs(glm::dot(ext, plane.GetNormal()));
+   float s = glm::dot(plane.GetNormal(), mid) - glm::dot(plane.GetOffset(), plane.GetNormal());
+
+   return glm::abs(s) <= glm::abs(r);
+}
+
+bool AABB::Intersects(const Triangle& triangle) const
+{
+   glm::vec3 mid = (m_MaxVert + m_MinVert) * 0.5f;
+   glm::vec3 h = m_MaxVert - mid;
+
+   glm::vec3 f[3] = {
+      triangle.B() - triangle.A(),
+      triangle.C() - triangle.B(),
+      triangle.A() - triangle.C()
    };
 
-   glm::vec4 planeCoeff(plane.GetNormal(), glm::dot(plane.GetNormal(), plane.GetOffset()));
-   int sign = 0;
-   for (int i = 0; i < 8; i++) {
-      float val = glm::dot(planeCoeff, glm::vec4(verts[i], 1.0f));
-      if (sign == 0) {
-         sign = glm::sign(val);
-      } else if (glm::sign(val) != sign) {
-         return true;
+   glm::vec3 v[3] = {
+      triangle.A() - mid,
+      triangle.B() - mid,
+      triangle.C() - mid
+   };
+   glm::mat3 vv(v[0], v[1], v[2]);
+
+   glm::vec3 axis[13];
+   for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+         axis[i * 3 + j] = glm::cross(UnitVector(i), f[j]);
       }
    }
+   axis[9] = RT_Float3UnitX;
+   axis[10] = RT_Float3UnitY;
+   axis[11] = RT_Float3UnitZ;
+   axis[12] = triangle.GetNormal();
 
-   return sign == 0;
+   for (int i = 0; i < 13; i++) {
+      float p0 = glm::dot(axis[i], v[0]);
+      float p1 = glm::dot(axis[i], v[1]);
+      float p2 = glm::dot(axis[i], v[2]);
+
+      glm::vec3 p = axis[i] * vv;
+
+      float r = glm::dot(h, glm::abs(axis[i]));
+
+      if (glm::compMin(p) > r || glm::compMax(p) < -r) return false;
+   }
+
+   return true;
 }
 
 void Octree::Clear()

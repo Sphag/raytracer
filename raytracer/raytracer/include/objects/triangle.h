@@ -7,8 +7,7 @@
 
 #include "objects/base_hittable.h"
 #include "materials/base_material.h"
-#include "objects/triangle.h"
-#include "objects/material.h"
+#include "objects/plane.h"
 
 
 class Triangle : public BaseHittable
@@ -30,7 +29,12 @@ public:
    }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
-   Plane GetPlane() const { return Plane(glm::normalize(m_Normal), m_A, m_Material); }
+   Plane GetPlane() const { return Plane(m_Normal, m_A, m_Material); }
+   
+   glm::vec3 GetNormal() const { return m_Normal; }
+   glm::vec3 A() const { return m_A; }
+   glm::vec3 B() const { return m_B; }
+   glm::vec3 C() const { return m_C; }
 private:
    glm::vec3 m_A, m_B, m_C;
    glm::vec3 m_AB, m_AC;

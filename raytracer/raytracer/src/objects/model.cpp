@@ -126,6 +126,9 @@ bool Model::ProcessChar(const char ch)
 {
    if (m_LoadTokenState == LOAD_TOKEN_STATE::BEGIN_TOKEN) {
       if (m_LoadLineState == LOAD_LINE_STATE::COMMENT) {
+         if (ch == '\n') {
+            m_LoadLineState = LOAD_LINE_STATE::BEGIN_LINE;
+         }
          return true;
       } else if (m_LoadLineState == LOAD_LINE_STATE::BEGIN_LINE) {
          m_LoadTokenType = LOAD_TOKEN_TYPE::LINE_TYPE;
@@ -150,6 +153,7 @@ bool Model::ProcessChar(const char ch)
             }
             case 'v':
             {
+               m_LoadTokenState = LOAD_TOKEN_STATE::CONTINUE_TOKEN;
                m_LoadTokenState = LOAD_TOKEN_STATE::CONTINUE_TOKEN;
                break;
             }

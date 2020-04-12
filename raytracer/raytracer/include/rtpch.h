@@ -20,6 +20,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include <glm/gtx/compatibility.hpp>
+#include <glm/gtx/component_wise.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <stb_image.h>
 #include <stb_image_write.h>
@@ -32,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include "core/pixel_traits.h"
 #include "core/core.h"
+#include "core/math_utils.h"
 
 #ifdef RT_DEBUG
 #include "Windows.h"

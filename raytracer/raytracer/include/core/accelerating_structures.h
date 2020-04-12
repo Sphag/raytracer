@@ -5,6 +5,7 @@
 #include <memory>
 
 #include <glm/glm.hpp>
+
 #include "core/ray.h"
 #include "objects/triangle.h"
 #include "objects/plane.h"
@@ -29,6 +30,7 @@ public:
 
    bool Hit(const Ray& ray, float minDist, float maxDist) const;
    bool Intersects(const Plane& plane) const;
+   bool Intersects(const Triangle& triangle) const;
 private:
    glm::vec3 m_MinVert; // vertex of BB, that contains the smallest x, y, z
    glm::vec3 m_MaxVert; // vertex of BB, that contains the largest x, y, z

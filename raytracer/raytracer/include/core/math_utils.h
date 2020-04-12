@@ -8,4 +8,6 @@ glm::vec3 RandomUnitVector();
 
 glm::vec3 RandomUnitHemisphere(const glm::vec3& normal);
 
+glm::vec3 UnitVector(int i);
+
 #endif
