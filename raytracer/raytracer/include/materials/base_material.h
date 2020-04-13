@@ -5,7 +5,8 @@
 
 #include <glm/glm.hpp>
 
-#include "core/ray.h"
+#include "core/core.h"
+#include "ray_tracer/ray.h"
 
 
 enum class MATERIAL_TYPE : int8_t

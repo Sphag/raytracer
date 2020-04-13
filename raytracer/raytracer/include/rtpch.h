@@ -32,9 +32,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Core or platform specific stuff
 ////////////////////////////////////////////////////////////////////////////////
-#include "core/pixel_traits.h"
 #include "core/core.h"
+#include "core/image.h"
 #include "core/math_utils.h"
+#include "core/pixel_traits.h"
+#include "core/string_utils.h"
 
 #ifdef RT_DEBUG
 #include "Windows.h"

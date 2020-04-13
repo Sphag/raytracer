@@ -1,11 +1,11 @@
 #ifndef __SPHERE__H_INCLUDED
 #define __SPHERE__H_INCLUDED
 
-#include "objects/base_hittable.h"
+#include "objects/base_object.h"
 #include "materials/base_material.h"
 
 
-class Sphere : public BaseHittable
+class Sphere : public BaseObject
 {
 public:
    Sphere(glm::vec3 center = glm::vec3(0.0f), float radius = 1.0f, std::shared_ptr<BaseMaterial> material = nullptr) : m_Center(center), 

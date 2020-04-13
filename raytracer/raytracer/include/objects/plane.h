@@ -5,11 +5,11 @@
 
 #include <glm/glm.hpp>
 
-#include "objects/base_hittable.h"
+#include "objects/base_object.h"
 #include "materials/base_material.h"
 
 
-class Plane : public BaseHittable
+class Plane : public BaseObject
 {
 public:
    Plane(

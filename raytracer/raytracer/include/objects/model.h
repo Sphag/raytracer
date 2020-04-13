@@ -6,17 +6,19 @@
 
 #include <glm/glm.hpp>
 
-#include "objects/base_hittable.h"
+#include "objects/base_object.h"
 #include "materials/base_material.h"
 #include "triangle.h"
 
 
-class Model : public BaseHittable
+class Model : public BaseObject
 {
 public:
    Model(
       const std::vector<Triangle>& mesh = std::vector<Triangle>(),
-      std::shared_ptr<BaseMaterial> material = nullptr) : m_Mesh(mesh), m_Material(material) {}
+      std::shared_ptr<BaseMaterial> material = nullptr
+   ) : m_Mesh(mesh), m_Material(material) {}
+
    Model(const std::string& filePath) { Load(filePath); }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;

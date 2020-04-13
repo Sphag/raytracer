@@ -5,9 +5,9 @@
 
 #include "core/image.h"
 #include "objects/sphere.h"
-#include "core/ray.h"
-#include "objects/hittable_list.h"
-#include "core/camera.h"
+#include "ray_tracer/ray.h"
+#include "objects/scene.h"
+#include "ray_tracer/camera.h"
 
 
 class RayTracer
@@ -15,7 +15,7 @@ class RayTracer
 public:
    static void Init(int width, int height);
 
-   static void SetScene(std::shared_ptr<HittableList> hittableList);
+   static void SetScene(std::shared_ptr<Scene> hittableList);
    static void SetCamera(std::shared_ptr<Camera> camera);
    static void SetSSRate(int samplesPerPixel);
    static void SetGamma(float gamma);
@@ -27,7 +27,7 @@ private:
 private:
    static int                           s_Width;
    static int                           s_Height;
-   static std::shared_ptr<HittableList> s_HittableList;
+   static std::shared_ptr<Scene> s_HittableList;
    static int                           s_SPP;
    static std::shared_ptr<Camera>       s_Camera;
    static float                         s_Gamma;

@@ -1,6 +1,8 @@
 #ifndef __CORE_H_INCLUDED
 #define __CORE_H_INCLUDED
 
+#include "core/pixel_traits.h"
+
 #define NOMINMAX
 
 #define RT_RandomFloatRange(x,y) glm::linearRand(x, y)

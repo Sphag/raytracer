@@ -1,9 +1,8 @@
 #ifndef __LAMBERTIAN_H_INCLUDED
 #define __LAMBERTIAN_H_INCLUDED
 
-#include <glm/glm.hpp>
-
 #include "base_material.h"
+
 
 class Lambertian : public BaseMaterial
 {

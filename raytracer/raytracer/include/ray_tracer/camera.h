@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>
 
-#include "ray.h"
+#include "ray_tracer/ray.h"
 
 
 class Camera
