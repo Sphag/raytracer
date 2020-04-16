@@ -3,13 +3,13 @@
 #include "core/image.h"
 
 #include "ray_tracer/ray_tracer.h"
-#include "core/ray.h"
+#include "ray_tracer/ray.h"
 #include "objects/sphere.h"
 
 // RayTracer static members
 int                           RayTracer::s_Width = 200;
 int                           RayTracer::s_Height = 100;
-std::shared_ptr<HittableList> RayTracer::s_HittableList = nullptr;
+std::shared_ptr<Scene> RayTracer::s_HittableList = nullptr;
 int                           RayTracer::s_SPP = 1;
 std::shared_ptr<Camera>       RayTracer::s_Camera = std::make_shared<Camera>();
 float                         RayTracer::s_Gamma = 2.0f;
@@ -22,7 +22,7 @@ void RayTracer::Init(int width, int height)
    s_Height = height;
 }
 
-void RayTracer::SetScene(std::shared_ptr<HittableList> hittableList)
+void RayTracer::SetScene(std::shared_ptr<Scene> hittableList)
 {
    s_HittableList = hittableList;
 }

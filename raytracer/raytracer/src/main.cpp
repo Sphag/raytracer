@@ -41,11 +41,11 @@ int main()
    // auto image = RayTracer::Render();
    // image.Write("render.png");
    
-  /* std::shared_ptr<HittableList> list = std::make_shared<HittableList>();
+  // std::shared_ptr<HittableList> list = std::make_shared<HittableList>();
    Model model;
-   model.SetMaterial(std::make_shared<Lambertian>(FRGBA(0.23f, 0.23f, 0.63f, 1.0f)));
+   //model.SetMaterial(std::make_shared<Lambertian>(FRGBA(0.23f, 0.23f, 0.63f, 1.0f)));
    model.Load("bunny.obj");
-   
+   /*
    //list->Add(std::make_shared<Model>(model));
    list->Add(std::make_shared<Plane>(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f), std::make_shared<Lambertian>(FRGBA(0.1f, 0.2f, 0.1f, 1.0f))));
    RayTracer::Init(960, 540);

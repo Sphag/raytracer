@@ -10,8 +10,9 @@
 
 class Scene : public BaseObject
 {
+   friend class IntersectMng;
 public:
-   Scene() : m_Objects() {}
+   Scene() : BaseObject(), m_Objects() {}
    
    void Clear() { m_Objects.clear(); }
    void Add(std::shared_ptr<BaseObject> object) { m_Objects.push_back(object); }

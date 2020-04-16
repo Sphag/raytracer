@@ -5,7 +5,7 @@
 bool Triangle::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
 {
    float det = -glm::dot(ray.Direction(), m_Normal);
-   float invdet = 1.0 / det;
+   float invdet = 1.0f / det;
    glm::vec3 AO = ray.Origin() - m_A;
    glm::vec3 DAO = glm::cross(AO, ray.Direction());
    float u =  glm::dot(m_AC, DAO)     * invdet;

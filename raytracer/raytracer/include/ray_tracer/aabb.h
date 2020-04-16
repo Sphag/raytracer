@@ -3,27 +3,20 @@
 
 #include "ray_tracer/ray.h"
 
-#include "objects/plane.h"
-#include "objects/triangle.h"
-
 
 class AABB
 {
 public:
-   AABB(const glm::vec3& min = glm::vec3(0.0f), const glm::vec3& max = glm::vec3(1.0f)) : m_MinVert(min), m_MaxVert(max) {}
+   AABB(const glm::vec3& center = glm::vec3(0.0f), const glm::vec3& dim = glm::vec3(1.0f)) : m_Center(center), m_Dim(dim) {}
 
-   glm::vec3 MinVert() const { return m_MinVert; }
-   glm::vec3 MaxVert() const { return m_MaxVert; }
+   glm::vec3 GetCenter() const { return m_Center; }
+   glm::vec3 GetDim() const { return m_Dim; }
 
-   void SetMinVert(const glm::vec3& min) { m_MinVert = min; }
-   void SetMaxVert(const glm::vec3& max) { m_MaxVert = max; }
-
-   bool Hit(const Ray& ray, float minDist, float maxDist) const;
-   bool Intersects(const Plane& plane) const;
-   bool Intersects(const Triangle& triangle) const;
+   void SetCenter(const glm::vec3& center) { m_Center = center; }
+   void SetDim(const glm::vec3& dim) { m_Dim = dim; }
 private:
-   glm::vec3 m_MinVert; // vertex of BB, that contains the smallest x, y, z
-   glm::vec3 m_MaxVert; // vertex of BB, that contains the largest x, y, z
+   glm::vec3 m_Center;
+   glm::vec3 m_Dim;
 };
 
 #endif

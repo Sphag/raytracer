@@ -7,6 +7,7 @@
 
 class Sphere : public BaseObject
 {
+   friend class IntersectMng;
 public:
    Sphere(glm::vec3 center = glm::vec3(0.0f), float radius = 1.0f, std::shared_ptr<BaseMaterial> material = nullptr) : m_Center(center), 
       m_Radius(radius),

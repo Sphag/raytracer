@@ -1,5 +1,6 @@
 #include "rtpch.h"
 #include "ray_tracer/octree.h"
+#include "ray_tracer/intersect_mng.h"
 
 
 void Octree::Clear()
@@ -49,13 +50,13 @@ void Octree::ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<T
       memset(node->childNodes[i], 0, sizeof(OctreeNode));
    }
 
-   glm::vec3 midPoint = 0.5f * (node->box.MinVert() + node->box.MaxVert());
+   glm::vec3 midPoint = glm::vec3(0.5f) /** (node->box.MinVert() + node->box.MaxVert())*/;
 
    SetUpBoxes(node, midPoint);
 
    for (int i = 0; i < 8; i++) {
       for (int j = 0; j < objects.size(); j++) {
-         if (node->childNodes[i]->box.Intersects(objects[j]->GetPlane())) {
+         if (IntersectMng::Intersects(node->childNodes[i]->box, objects[j]->GetPlane())) {
             node->childNodes[i]->objectsIndices.push_back(j);
          }
       }
@@ -68,7 +69,7 @@ void Octree::ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<T
 
 void Octree::SetUpBoxes(OctreeNode *parent, const glm::vec3& midPoint) const
 {
-   glm::vec3 diag = midPoint - parent->box.MinVert();
+   /*glm::vec3 diag = midPoint - parent->box.MinVert();
    // 1
    parent->childNodes[0]->box.SetMinVert(parent->box.MinVert());
    parent->childNodes[0]->box.SetMaxVert(midPoint);
@@ -99,5 +100,5 @@ void Octree::SetUpBoxes(OctreeNode *parent, const glm::vec3& midPoint) const
 
    // 8
    parent->childNodes[7]->box.SetMinVert(midPoint);
-   parent->childNodes[7]->box.SetMaxVert(parent->box.MaxVert());
+   parent->childNodes[7]->box.SetMaxVert(parent->box.MaxVert());*/
 }

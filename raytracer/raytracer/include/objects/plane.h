@@ -5,21 +5,24 @@
 
 #include <glm/glm.hpp>
 
+#include "ray_tracer/aabb.h"
 #include "objects/base_object.h"
 #include "materials/base_material.h"
 
 
 class Plane : public BaseObject
 {
+   friend class IntersectMng;
 public:
    Plane(
       const glm::vec3& normal = glm::vec3(0.0f, 1.0f, 0.0f),
       const glm::vec3& offset = glm::vec3(0.0f, 0.0f, 0.0f),
       std::shared_ptr<BaseMaterial> material = nullptr) :
-      m_Normal(normal),
-      m_Offset(offset),
-      m_Material(material)
+      BaseObject()
    {
+      m_Material = material;
+      m_Normal = normal;
+      m_Offset = offset;
       RT_ASSERT(m_Normal != glm::vec3(0.0f));
    }
 
@@ -31,7 +34,6 @@ public:
 private:
    glm::vec3 m_Normal;
    glm::vec3 m_Offset;
-   std::shared_ptr<BaseMaterial> m_Material;
 };
 
 #endif

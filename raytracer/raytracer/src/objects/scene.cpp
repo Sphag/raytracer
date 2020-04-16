@@ -1,9 +1,9 @@
 #include "rtpch.h"
-#include "objects/hittable_list.h"
-#include "core/ray.h"
+#include "objects/scene.h"
+#include "ray_tracer/ray.h"
 #include "objects/sphere.h"
 
-bool HittableList::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
+bool Scene::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
 {
    HitInfo tempHitInfo;
    bool isHitOccurred = false;

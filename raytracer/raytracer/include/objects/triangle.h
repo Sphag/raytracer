@@ -12,17 +12,19 @@
 
 class Triangle : public BaseObject
 {
+   friend class IntersectMng;
 public:
    Triangle(
       const glm::vec3& A = glm::vec3(0.0f),
       const glm::vec3& B = glm::vec3(0.0f),
       const glm::vec3& C = glm::vec3(0.0f),
       std::shared_ptr<BaseMaterial> material = nullptr) :
-   m_A(A),
-   m_B(B),
-   m_C(C),
-   m_Material(material)
+      BaseObject(),
+      m_A(A),
+      m_B(B),
+      m_C(C)
    {
+      m_Material = material;
       m_AB = m_B - m_A;
       m_AC = m_C - m_A;
       m_Normal = glm::cross(m_AB, m_AC);

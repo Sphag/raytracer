@@ -2,6 +2,7 @@
 #define __OCTREE_H_INCLUDED
 
 #include "ray_tracer/aabb.h"
+#include "objects/triangle.h"
 
 constexpr int MAX_OBJECTS_IN_ONE_NODE = 5;
 

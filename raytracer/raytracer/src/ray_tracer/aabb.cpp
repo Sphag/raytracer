@@ -1,10 +1,10 @@
 #include "rtpch.h"
 #include "ray_tracer/aabb.h"
 
-
-bool AABB::Hit(const Ray& ray, float minDist, float maxDist) const
+/*
+bool AABB::Intersects(const Ray& ray) const
 {
-   glm::vec3 t0 = glm::min(
+   /*glm::vec3 t0 = glm::min(
       (m_MinVert - ray.Origin()) / ray.Direction(),
       (m_MaxVert - ray.Origin()) / ray.Direction()
    );
@@ -20,25 +20,25 @@ bool AABB::Hit(const Ray& ray, float minDist, float maxDist) const
    if (glm::any(glm::lessThanEqual(tMax, tMin))) {
       return false;
    }
-
+   
    return true;
 }
 
 bool AABB::Intersects(const Plane& plane) const
 {
-   glm::vec3 mid = (m_MaxVert + m_MinVert) * 0.5f;
-   glm::vec3 ext = m_MaxVert - mid;
+   /* glm::vec3 mid = (m_MaxVert + m_MinVert) * 0.5f;
+    glm::vec3 ext = m_MaxVert - mid;
 
 
-   float r = glm::abs(glm::dot(ext, plane.GetNormal()));
-   float s = glm::dot(plane.GetNormal(), mid) - glm::dot(plane.GetOffset(), plane.GetNormal());
+    float r = glm::abs(glm::dot(ext, plane.GetNormal()));
+    float s = glm::dot(plane.GetNormal(), mid) - glm::dot(plane.GetOffset(), plane.GetNormal());
 
-   return glm::abs(s) <= glm::abs(r);
+    return glm::abs(s) <= glm::abs(r);return true;
 }
 
 bool AABB::Intersects(const Triangle& triangle) const
 {
-   glm::vec3 mid = (m_MaxVert + m_MinVert) * 0.5f;
+   /*glm::vec3 mid = (m_MaxVert + m_MinVert) * 0.5f;
    glm::vec3 h = m_MaxVert - mid;
 
    glm::vec3 f[3] = {
@@ -76,6 +76,7 @@ bool AABB::Intersects(const Triangle& triangle) const
 
       if (glm::compMin(p) > r || glm::compMax(p) < -r) return false;
    }
-
+   
    return true;
 }
+*/
