@@ -23,10 +23,12 @@ void Octree::ClearImpl(OctreeNode* node)
    node = nullptr;
 }
 
-void Octree::Construct(const AABB& initialBB, const std::vector<std::shared_ptr<Triangle>>& objects)
+void Octree::Construct(const std::vector<std::shared_ptr<Triangle>>& objects)
 {
    m_Root = (OctreeNode*)malloc(sizeof(OctreeNode));
    memset(m_Root, 0, sizeof(m_Root));
+
+
 
    m_Root->box = initialBB;
 
@@ -50,9 +52,7 @@ void Octree::ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<T
       memset(node->childNodes[i], 0, sizeof(OctreeNode));
    }
 
-   glm::vec3 midPoint = glm::vec3(0.5f) /** (node->box.MinVert() + node->box.MaxVert())*/;
-
-   SetUpBoxes(node, midPoint);
+   SetUpBoxes(node);
 
    for (int i = 0; i < 8; i++) {
       for (int j = 0; j < objects.size(); j++) {
@@ -67,38 +67,39 @@ void Octree::ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<T
    }
 }
 
-void Octree::SetUpBoxes(OctreeNode *parent, const glm::vec3& midPoint) const
+void Octree::SetUpBoxes(OctreeNode *parent) const
 {
-   /*glm::vec3 diag = midPoint - parent->box.MinVert();
+   glm::vec3 newDim = 0.5f * parent->box.GetDim();
+   glm::vec3 max = parent->box.GetCenter() + parent->box.GetDim();
    // 1
-   parent->childNodes[0]->box.SetMinVert(parent->box.MinVert());
-   parent->childNodes[0]->box.SetMaxVert(midPoint);
+   parent->childNodes[0]->box.SetCenter(parent->box.GetCenter() - newDim);
+   parent->childNodes[0]->box.SetDim(newDim);
 
    // 2
-   parent->childNodes[1]->box.SetMinVert(parent->box.MinVert() + glm::vec3(0.0f, diag.y, 0.0f));
-   parent->childNodes[1]->box.SetMaxVert(midPoint + glm::vec3(0.0f, diag.y, 0.0f));
+   parent->childNodes[1]->box.SetCenter(parent->box.GetCenter() - newDim + parent->box.GetDim().x);
+   parent->childNodes[1]->box.SetDim(newDim);
 
    // 3
-   parent->childNodes[2]->box.SetMinVert(parent->box.MinVert() + glm::vec3(0.0f, 0.0f, diag.z));
-   parent->childNodes[2]->box.SetMaxVert(midPoint + glm::vec3(0.0f, 0.0f, diag.z));
+   parent->childNodes[2]->box.SetCenter(parent->box.GetCenter() - newDim + parent->box.GetDim().y);
+   parent->childNodes[2]->box.SetDim(newDim);
 
    // 4
-   parent->childNodes[3]->box.SetMinVert(parent->box.MinVert() + glm::vec3(0.0f, diag.y, diag.z));
-   parent->childNodes[3]->box.SetMaxVert(midPoint + glm::vec3(0.0f, diag.y, diag.z));
+   parent->childNodes[3]->box.SetCenter(parent->box.GetCenter() - newDim + parent->box.GetDim().x + parent->box.GetDim().y);
+   parent->childNodes[3]->box.SetDim(newDim);
 
    // 5
-   parent->childNodes[4]->box.SetMinVert(parent->box.MinVert() + glm::vec3(diag.x, 0.0f, 0.0f));
-   parent->childNodes[4]->box.SetMaxVert(midPoint + glm::vec3(diag.x, 0.0f, 0.0f));
+   parent->childNodes[4]->box.SetCenter(parent->box.GetCenter() + newDim - parent->box.GetDim().x - parent->box.GetDim().y);
+   parent->childNodes[4]->box.SetDim(newDim);
 
    // 6
-   parent->childNodes[5]->box.SetMinVert(parent->box.MinVert() + glm::vec3(diag.x, diag.y, 0.0f));
-   parent->childNodes[5]->box.SetMaxVert(midPoint + glm::vec3(diag.x, diag.y, 0.0f));
+   parent->childNodes[5]->box.SetCenter(parent->box.GetCenter() + newDim - parent->box.GetDim().y);
+   parent->childNodes[5]->box.SetDim(newDim);
 
    // 7
-   parent->childNodes[6]->box.SetMinVert(parent->box.MinVert() + glm::vec3(diag.x, 0.0f, diag.z));
-   parent->childNodes[6]->box.SetMaxVert(midPoint + glm::vec3(diag.x, 0.0f, diag.z));
+   parent->childNodes[6]->box.SetCenter(parent->box.GetCenter() + newDim - parent->box.GetDim().x);
+   parent->childNodes[6]->box.SetDim(newDim);
 
    // 8
-   parent->childNodes[7]->box.SetMinVert(midPoint);
-   parent->childNodes[7]->box.SetMaxVert(parent->box.MaxVert());*/
+   parent->childNodes[7]->box.SetCenter(parent->box.GetCenter() + newDim);
+   parent->childNodes[7]->box.SetDim(newDim);
 }

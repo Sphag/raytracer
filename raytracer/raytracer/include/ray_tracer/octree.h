@@ -26,7 +26,7 @@ private:
    };
 
    void ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<Triangle>>& objects);
-   void SetUpBoxes(OctreeNode *parent, const glm::vec3& midPoint) const;
+   void SetUpBoxes(OctreeNode *parent) const;
 
    void ClearImpl(OctreeNode* node);
 private:

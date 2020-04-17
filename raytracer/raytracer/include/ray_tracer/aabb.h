@@ -19,4 +19,7 @@ private:
    glm::vec3 m_Dim;
 };
 
+
+AABB GetCommonAABB(const std::vector<AABB> boxes);
+
 #endif

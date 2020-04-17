@@ -10,6 +10,7 @@
 #include <vector>
 #include <climits>
 #include <memory>
+#include <algorithm>
 #include <cstdio>
 #include <cctype>
 #include <cstdlib>

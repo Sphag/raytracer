@@ -12,7 +12,13 @@ public:
       glm::vec3 center,
       glm::vec3 dim,
       std::shared_ptr<BaseMaterial> material
-   ) : m_Center(center) {}
+   ) : m_Center(center), m_Dim(dim) 
+   {
+      m_Material = material;
+   }
+
+   glm::vec3 GetCenter() const { return m_Center; }
+   glm::vec3 GetDim() const { return m_Dim; }
    
 private:
    glm::vec3 m_Center;
