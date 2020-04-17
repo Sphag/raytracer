@@ -29,14 +29,12 @@ void Octree::Construct(const std::vector<std::shared_ptr<Triangle>>& objects)
    memset(m_Root, 0, sizeof(m_Root));
 
 
-
-   m_Root->box = initialBB;
-
    m_Root->objectsIndices.resize(objects.size());
    for (int i = 0; i < objects.size(); i++) {
       m_Root->objectsIndices[i] = i;
    }
 
+   m_Root->box = GetCommonAABB(GetAABB(m_Root->objectsIndices));
    ConstructImpl(m_Root, objects);
 }
 
@@ -102,4 +100,14 @@ void Octree::SetUpBoxes(OctreeNode *parent) const
    // 8
    parent->childNodes[7]->box.SetCenter(parent->box.GetCenter() + newDim);
    parent->childNodes[7]->box.SetDim(newDim);
+}
+
+std::vector<AABB> Octree::GetAABB(const std::vector<int>& indices)
+{
+   std::vector<AABB> aabbs;
+   for (int i = 0; i < indices.size(); i++) {
+      aabbs.push_back(m_Data[indices[i]]->GetAABB());
+   }
+
+   return aabbs;
 }

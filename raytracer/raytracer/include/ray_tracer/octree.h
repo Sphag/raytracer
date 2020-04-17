@@ -15,7 +15,7 @@ public:
 
    ~Octree() { Clear(); }
 
-   void Construct(const AABB& initialBB, const std::vector<std::shared_ptr<Triangle>>& objects);
+   void Construct(const std::vector<std::shared_ptr<Triangle>>& objects);
 
 private:
    struct OctreeNode
@@ -27,7 +27,7 @@ private:
 
    void ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<Triangle>>& objects);
    void SetUpBoxes(OctreeNode *parent) const;
-
+   std::vector<AABB> GetAABB(const std::vector<int>& indices);
    void ClearImpl(OctreeNode* node);
 private:
    AABB m_InitialBox;

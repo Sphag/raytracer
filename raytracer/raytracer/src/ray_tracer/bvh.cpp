@@ -30,7 +30,9 @@ void BVH::ConstructImpl(BVHNode* node, const std::vector<int>& indices)
    node->aabb = GetCommonAABB(GetAABB(node->objectIndices));
    if (node->objectIndices.size() > MAX_OBJECTS_IN_VOLUME) {
       std::vector<int> objIndices = indices;
-      std::sort(objIndices.begin(), objIndices.end(), cmp);
+      std::sort(objIndices.begin(), objIndices.end(), [this](int lhs, int rhs) {
+         return cmp(lhs, rhs);
+      });
 
       std::vector<int> left(objIndices.begin(), objIndices.begin() + objIndices.size() / 2);
       std::vector<int> right(objIndices.begin() + objIndices.size() / 2, objIndices.end());
