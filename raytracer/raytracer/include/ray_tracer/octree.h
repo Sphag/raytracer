@@ -28,10 +28,15 @@ public:
    OctreeNode* GetRoot() const { return m_Root; }
    std::vector<AABB> GetAABB(const std::vector<int>& indices);
 
+   bool FindIntersectedNode(const Ray& ray, OctreeNode* outNode) const;
+
+   std::shared_ptr<Triangle> GetTriangleById(int idx) const { return m_Data[idx]; }
+
 private:
    void ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<Triangle>>& objects);
    void SetUpBoxes(OctreeNode *parent) const;
    void ClearImpl(OctreeNode* node);
+   bool FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, OctreeNode* outNode) const;
 private:
    AABB m_InitialBox;
    std::vector<std::shared_ptr<Triangle>> m_Data;

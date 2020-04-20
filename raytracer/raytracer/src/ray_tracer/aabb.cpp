@@ -11,7 +11,8 @@ AABB GetCommonAABB(const std::vector<AABB> boxes)
       glm::vec3 bmax = box.GetCenter() + box.GetDim();
       if (glm::any(glm::lessThan(bmin, min))) {
          min = bmin;
-      } else if (glm::any(glm::greaterThan(bmax, max))) {
+      } 
+      if (glm::any(glm::greaterThan(bmax, max))) {
          max = bmax;
       }
    }

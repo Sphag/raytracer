@@ -9,13 +9,26 @@ bool Model::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
    HitInfo tempHitInfo;
    bool isHitOccurred = false;
    float closest = maxDist;
-   if (CheckHitNode(m_Tree.GetRoot(), ray, minDist, maxDist, tempHitInfo)) {
-      hitInfo = tempHitInfo;
-      isHitOccurred = true;
-      closest = tempHitInfo.t;
-      hitInfo = tempHitInfo;
-      hitInfo.material = m_Material;
+   if (!IntersectMng::Intersects(ray, m_BoundingBox)) {
+      return false;
    }
+
+   OctreeNode* node = nullptr;
+   if (!m_Tree.FindIntersectedNode(ray, node)) {
+      return false;
+   }
+
+   RT_ASSERT(node);
+
+   for (int i = 0; i < node->objectsIndices.size(); i++) {
+      if (m_Tree.GetTriangleById(i)->Hit(ray, minDist, maxDist, tempHitInfo)) {
+         closest = tempHitInfo.t;
+         hitInfo = tempHitInfo;
+         isHitOccurred = true;
+         hitInfo.material = m_Material;
+      }
+   }
+
    return isHitOccurred;
 }
 
@@ -59,32 +72,4 @@ bool Model::Load(const std::string filePath)
    m_BoundingBox = GetCommonAABB(m_Tree.GetAABB(indices));
 
    return true;
-}
-
-bool Model::CheckHitNode(OctreeNode* node, const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
-{
-   HitInfo dummyInfo;
-   bool isHitOccurred = false;
-   if (IntersectMng::Intersects(node->box, ray)) {
-      if (node->objectsIndices.size() > MAX_OBJECTS_IN_ONE_NODE) {
-         for (int i = 0; i < 8; i++) {
-            if (node->childNodes[i]) {
-               if (CheckHitNode(node->childNodes[i], ray, minDist, maxDist, hitInfo)) {
-                  return true;
-               }
-            }
-         }
-
-         RT_ASSERT(false);
-      }
-   } else {
-      for (int i = 0; i < node->objectsIndices.size(); i++) {
-         if (m_Mesh[i]->Hit(ray, minDist, maxDist, dummyInfo)) {
-            if (dummyInfo.t < hitInfo.t) {
-               hitInfo = dummyInfo;
-               isHitOccurred = true;
-            }
-         }
-      }
-   }
 }

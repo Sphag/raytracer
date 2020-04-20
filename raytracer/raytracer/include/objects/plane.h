@@ -23,6 +23,7 @@ public:
       m_Material = material;
       m_Normal = normal;
       m_Offset = offset;
+      m_BoundingBox = { glm::vec3(0.0f), {INFINITY, INFINITY, INFINITY} };
       RT_ASSERT(m_Normal != glm::vec3(0.0f));
    }
 

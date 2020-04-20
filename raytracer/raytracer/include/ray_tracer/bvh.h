@@ -24,20 +24,23 @@ public:
    BVH(const AABB& aabb = AABB(), const std::vector<std::shared_ptr<BaseObject>>& objects = std::vector<std::shared_ptr<BaseObject>>()) :
       m_Root(nullptr), m_AABB(aabb)
    {
-      if (!m_Objects.empty()) {
-         Construct(objects);
-      }
    }
 
    ~BVH() { Clear(); }
 
-   void Clear() { ClearImpl(m_Root); }
+   void Clear() { ClearImpl(&m_Root); }
+
+   bool GetRootAABB(AABB& outAABB) const { outAABB = m_Root->aabb; return m_Root; }
 
    void Construct(const std::vector<std::shared_ptr<BaseObject>>& objects);
    std::vector<AABB> GetAABB(const std::vector<int>& indices);
+   std::shared_ptr<BaseObject> GetObjectById(int idx) const { return m_Objects[idx]; }
+
+   bool FindIntersectingVolume(const Ray& ray, BVHNode** outNode) const;
 private:
-   void ClearImpl(BVHNode* node);
-   void ConstructImpl(BVHNode* node, const std::vector<int>& indices);
+   bool FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, BVHNode** outNode) const;
+   void ClearImpl(BVHNode** node);
+   void ConstructImpl(BVHNode** node, const std::vector<int>& indices);
    bool cmp(int lhs, int rhs) {
       return glm::distance(m_Root->aabb.GetCenter() - m_Root->aabb.GetDim(), m_Objects[lhs]->GetAABB().GetCenter() - m_Objects[lhs]->GetAABB().GetDim()) <
          glm::distance(m_Root->aabb.GetCenter() - m_Root->aabb.GetDim(), m_Objects[rhs]->GetAABB().GetCenter() - m_Objects[rhs]->GetAABB().GetDim());
