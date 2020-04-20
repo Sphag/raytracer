@@ -11,7 +11,10 @@ class Sphere : public BaseObject
 public:
    Sphere(glm::vec3 center = glm::vec3(0.0f), float radius = 1.0f, std::shared_ptr<BaseMaterial> material = nullptr) : m_Center(center), 
       m_Radius(radius),
-      m_Material(material){}
+      m_Material(material)
+   {
+      m_BoundingBox = { m_Center, {radius, radius, radius} };
+   }
    Sphere(const Sphere& other) = default;
    Sphere(Sphere&& other) = default;
 

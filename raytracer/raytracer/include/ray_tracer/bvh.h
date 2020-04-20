@@ -22,10 +22,10 @@ class BVH
 {
 public:
    BVH(const AABB& aabb = AABB(), const std::vector<std::shared_ptr<BaseObject>>& objects = std::vector<std::shared_ptr<BaseObject>>()) :
-      m_Objects(objects), m_Root(nullptr), m_AABB(aabb)
+      m_Root(nullptr), m_AABB(aabb)
    {
       if (!m_Objects.empty()) {
-         Construct();
+         Construct(objects);
       }
    }
 
@@ -33,11 +33,11 @@ public:
 
    void Clear() { ClearImpl(m_Root); }
 
-   void Construct();
+   void Construct(const std::vector<std::shared_ptr<BaseObject>>& objects);
+   std::vector<AABB> GetAABB(const std::vector<int>& indices);
 private:
    void ClearImpl(BVHNode* node);
    void ConstructImpl(BVHNode* node, const std::vector<int>& indices);
-   std::vector<AABB> GetAABB(const std::vector<int>& indices);
    bool cmp(int lhs, int rhs) {
       return glm::distance(m_Root->aabb.GetCenter() - m_Root->aabb.GetDim(), m_Objects[lhs]->GetAABB().GetCenter() - m_Objects[lhs]->GetAABB().GetDim()) <
          glm::distance(m_Root->aabb.GetCenter() - m_Root->aabb.GetDim(), m_Objects[rhs]->GetAABB().GetCenter() - m_Objects[rhs]->GetAABB().GetDim());

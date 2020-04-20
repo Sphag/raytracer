@@ -28,6 +28,9 @@ public:
       m_AB = m_B - m_A;
       m_AC = m_C - m_A;
       m_Normal = glm::cross(m_AB, m_AC);
+      glm::vec3 min = glm::min(glm::min(A, B), C);
+      glm::vec3 max = glm::max(glm::max(A, B), C);
+      m_BoundingBox = { 0.5f * (max + min), max - 0.5f * (max + min) };
    }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;

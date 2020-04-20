@@ -7,8 +7,9 @@
 #include <glm/glm.hpp>
 
 #include "objects/base_object.h"
+#include "ray_tracer/octree.h"
 #include "materials/base_material.h"
-#include "triangle.h"
+#include "objects/triangle.h"
 
 
 class Model : public BaseObject
@@ -26,9 +27,12 @@ public:
    bool Load(const std::string filePath);
    void SetMaterial(std::shared_ptr<BaseMaterial> material) { m_Material = material; }
 private:
-   std::vector<Triangle> m_Mesh;
+   bool CheckHitNode(OctreeNode* node, const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const;
+private:
+   std::vector<std::shared_ptr<Triangle>> m_Mesh;
    std::vector<glm::vec3> m_VertexNormals;
    std::shared_ptr<BaseMaterial> m_Material;
+   Octree m_Tree;
 };
 
 #endif

@@ -2,13 +2,14 @@
 #include "ray_tracer/bvh.h"
 
 
-void BVH::Construct()
+void BVH::Construct(const std::vector<std::shared_ptr<BaseObject>>& objects)
 {
    if (m_Root) {
       Clear();
    }
 
-   std::vector<int> indices; for (int i = 0; i < m_Objects.size(); i++) indices.push_back(i);
+   m_Objects = objects;
+   std::vector<int> indices; for (int i = 0; i < objects.size(); i++) indices.push_back(i);
    ConstructImpl(m_Root, indices);
 }
 

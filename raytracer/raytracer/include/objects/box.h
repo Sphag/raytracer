@@ -15,6 +15,7 @@ public:
    ) : m_Center(center), m_Dim(dim) 
    {
       m_Material = material;
+      m_BoundingBox = { center, dim };
    }
 
    glm::vec3 GetCenter() const { return m_Center; }
