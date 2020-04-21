@@ -20,7 +20,7 @@ bool BVH::FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, BVHNode** 
       return false;
    }
 
-   if (!IntersectMng::Intersects(m_AABB, ray)) {
+   if (!IntersectMng::Intersects(inNode->aabb, ray)) {
       return false;
    }
 
@@ -30,6 +30,10 @@ bool BVH::FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, BVHNode** 
 
    if (FindIntersectingVolumeImpl(ray, inNode->second, outNode)) {
       return true;
+   }
+
+   if (inNode->first || inNode->second) {
+      return false;
    }
 
    *outNode = inNode;
@@ -55,7 +59,8 @@ void BVH::ConstructImpl(BVHNode** node, const std::vector<int>& indices)
    if ((*node)->objectIndices.size() > MAX_OBJECTS_IN_VOLUME) {
       std::vector<int> objIndices = indices;
       std::sort(objIndices.begin(), objIndices.end(), [this](int lhs, int rhs) {
-         return cmp(lhs, rhs);
+         bool cmpp = cmp(lhs, rhs);
+         return cmpp;
       });
 
       std::vector<int> left(objIndices.begin(), objIndices.begin() + objIndices.size() / 2);

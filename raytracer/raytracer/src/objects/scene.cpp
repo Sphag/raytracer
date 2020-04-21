@@ -17,7 +17,7 @@ bool Scene::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
 
    RT_ASSERT(node);
    for (int i = 0; i < node->objectIndices.size(); i++) {
-      if (m_BVH.GetObjectById(i)->Hit(ray, minDist, maxDist, tempHitInfo) && tempHitInfo.t < closest) {
+      if (m_BVH.GetObjectById(node->objectIndices[i])->Hit(ray, minDist, maxDist, tempHitInfo) && tempHitInfo.t < closest) {
          isHitOccurred = true;
          closest = tempHitInfo.t;
          hitInfo = tempHitInfo;

@@ -410,17 +410,42 @@ bool IntersectMng::Intersects(const Ray& lhs, const Plane& rhs)
 
 bool IntersectMng::Intersects(const AABB& lhs, const Ray& rhs)
 {
-   glm::vec3 t0 = (lhs.GetCenter() - lhs.GetDim() - rhs.Origin()) / rhs.Direction();
-   glm::vec3 t1 = (lhs.GetCenter() + lhs.GetDim() - rhs.Origin()) / rhs.Direction();
+   glm::vec3 min = lhs.GetCenter() - lhs.GetDim();
+   glm::vec3 max = lhs.GetCenter() + lhs.GetDim();
+   float tmin = (min.x - rhs.Origin().x) / rhs.Direction().x;
+   float tmax = (max.x - rhs.Origin().x) / rhs.Direction().x;
 
-   if (t0.x > t1.x) std::swap(t0.x, t1.x);
-   if (t0.y > t1.y) std::swap(t0.y, t1.y);
-   if (t0.z > t1.z) std::swap(t0.z, t1.z);
+   if (tmin > tmax) std::swap(tmin, tmax);
 
-   float tmin = glm::compMax(t0);
-   float tmax = glm::compMin(t1);
+   float tymin = (min.y - rhs.Origin().y) / rhs.Direction().y;
+   float tymax = (max.y - rhs.Origin().y) / rhs.Direction().y;
 
-   return tmin <= tmax;
+   if (tymin > tymax) std::swap(tymin, tymax);
+
+   if ((tmin > tymax) || (tymin > tmax))
+      return false;
+
+   if (tymin > tmin)
+      tmin = tymin;
+
+   if (tymax < tmax)
+      tmax = tymax;
+
+   float tzmin = (min.z - rhs.Origin().z) / rhs.Direction().z;
+   float tzmax = (max.z - rhs.Origin().z) / rhs.Direction().z;
+
+   if (tzmin > tzmax) std::swap(tzmin, tzmax);
+
+   if ((tmin > tzmax) || (tzmin > tmax))
+      return false;
+
+   if (tzmin > tmin)
+      tmin = tzmin;
+
+   if (tzmax < tmax)
+      tmax = tzmax;
+
+   return true;
 }
 
 bool IntersectMng::Intersects(const Ray& lhs, const AABB& rhs)

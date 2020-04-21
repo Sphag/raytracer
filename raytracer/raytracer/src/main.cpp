@@ -28,15 +28,20 @@ int main()
    //hittableList->Add(std::make_shared<Sphere>(glm::vec3(-1, 0, -1), 0.5f, std::make_shared<Dielectric>(1.66f)));
    //hittableList->Add(std::make_shared<Sphere>(glm::vec3(-1, 0, -1), 0.45f, std::make_shared<Dielectric>(1.66f)));
    //std::shared_ptr<Model> model = std::make_shared<Model>("cube.obj");
-   std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(0, 0, -1), 0.5f, std::make_shared<Lambertian>(FRGBA(0.1, 0.2, 0.8, 1.0f)));
+   std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(-0.25, 0, -3), 0.25f, std::make_shared<Lambertian>(FRGBA(0.0, 0.0, 0.8, 1.0f)));
+
+   scene->Add(std::make_shared<Sphere>(glm::vec3(-1.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.9, 0.3, 0.3, 1.0))));
+   scene->Add(std::make_shared<Sphere>(glm::vec3(-0.75, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.8, 0.3, 0.3, 1.0))));
    scene->Add(sphere);
-   scene->Add(std::make_shared<Sphere>(glm::vec3(1.5,0, -1), 0.25, std::make_shared<Lambertian>(FRGBA(0.7, 0.3, 0.3, 1.0))));
+   scene->Add(std::make_shared<Sphere>(glm::vec3(0.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));
+   scene->Add(std::make_shared<Sphere>(glm::vec3(0.75, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));
+   scene->Add(std::make_shared<Sphere>(glm::vec3(1.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));
    scene->Construct();
    RayTracer::Init(960, 540);
    RayTracer::SetScene(scene);
    RayTracer::SetSSRate(50);
    RayTracer::SetBounceDepth(20);
-   std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 16.f/9, 90.0f);
+   std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 4.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 16.f/9, 90.0f);
    RayTracer::SetCamera(camera);
    auto image = RayTracer::Render();
    image.Write("cube.png");
