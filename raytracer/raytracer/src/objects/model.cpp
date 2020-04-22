@@ -10,22 +10,12 @@ bool Model::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
    bool isHitOccurred = false;
    float closest = maxDist;
    
-   std::vector<OctreeNode*> nodesFound;
-   if (!m_Tree.FindIntersectedNode(ray, nodesFound)) {
-      return false;
-   }
-
-   RT_ASSERT(nodesFound.size());
-   volatile int nn = nodesFound.size();
-   for (int n = 0; n < nodesFound.size(); n++) {
-      for (int i = 0; i < nodesFound[n]->objectsIndices.size(); i++) {
-         if (m_Tree.GetTriangleById(nodesFound[n]->objectsIndices[i])->Hit(ray, minDist, maxDist, tempHitInfo)) {
-            closest = tempHitInfo.t;
-            hitInfo = tempHitInfo;
-            isHitOccurred = true;
-            hitInfo.material = m_Material;
-         }
-      }
+   std::shared_ptr<Triangle> closestHit = nullptr;
+   if (m_Tree.FindIntersectedNode(ray, minDist, maxDist, tempHitInfo)) {
+      closest = tempHitInfo.t;
+      hitInfo = tempHitInfo;
+      isHitOccurred = true;
+      hitInfo.material = m_Material;
    }
    
    /*
@@ -79,6 +69,5 @@ bool Model::Load(const std::string filePath)
    m_Tree.Construct(m_Mesh);
    std::vector<int> indices; for (int i = 0; i < m_Mesh.size(); i++) indices.push_back(i);
    m_BoundingBox = GetCommonAABB(m_Tree.GetAABB(indices));
-
    return true;
 }

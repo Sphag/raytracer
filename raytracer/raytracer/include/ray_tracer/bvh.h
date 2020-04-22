@@ -16,7 +16,7 @@ struct BVHNode
    std::vector<int> objectIndices;
 };
 
-constexpr int MAX_OBJECTS_IN_VOLUME = 5;
+constexpr int MAX_OBJECTS_IN_VOLUME = 20;
 
 class BVH
 {
@@ -36,9 +36,9 @@ public:
    std::vector<AABB> GetAABB(const std::vector<int>& indices);
    std::shared_ptr<BaseObject> GetObjectById(int idx) const { return m_Objects[idx]; }
 
-   bool FindIntersectingVolume(const Ray& ray, BVHNode** outNode) const;
+   bool FindIntersectingVolume(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const;
 private:
-   bool FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, BVHNode** outNode) const;
+   bool FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, float minDist, float maxDist, HitInfo& hitInfo) const;
    void ClearImpl(BVHNode** node);
    void ConstructImpl(BVHNode** node, const std::vector<int>& indices);
    bool cmp(int lhs, int rhs) {

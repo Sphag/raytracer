@@ -13,7 +13,7 @@ struct OctreeNode
 };
 
 
-constexpr int MAX_OBJECTS_IN_ONE_NODE = 6000;
+constexpr int MAX_OBJECTS_IN_ONE_NODE = 500;
 
 class Octree
 {
@@ -28,7 +28,7 @@ public:
    OctreeNode* GetRoot() const { return m_Root; }
    std::vector<AABB> GetAABB(const std::vector<int>& indices);
 
-   bool FindIntersectedNode(const Ray& ray, std::vector<OctreeNode*>& outNodes) const;
+   bool FindIntersectedNode(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const;
 
    std::shared_ptr<Triangle> GetTriangleById(int idx) const { return m_Data[idx]; }
 
@@ -36,7 +36,7 @@ private:
    void ConstructImpl(OctreeNode** node, const std::vector<std::shared_ptr<Triangle>>& objects);
    void SetUpBoxes(OctreeNode *parent) const;
    void ClearImpl(OctreeNode** node);
-   bool FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, std::vector<OctreeNode*>& outNodes) const;
+   bool FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, float minDist, float maxDist, HitInfo& hitInfo) const;
 private:
    AABB m_InitialBox;
    std::vector<std::shared_ptr<Triangle>> m_Data;

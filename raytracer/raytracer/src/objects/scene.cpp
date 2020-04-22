@@ -8,22 +8,10 @@ bool Scene::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
 {
    HitInfo tempHitInfo;
    bool isHitOccurred = false;
-   float closest = maxDist;
 
-   BVHNode* node = nullptr;
-   if (!m_BVH.FindIntersectingVolume(ray, &node)) {
-      return false;
-   }
-
-   RT_ASSERT(node);
-   for (int i = 0; i < node->objectIndices.size(); i++) {
-      if (m_BVH.GetObjectById(node->objectIndices[i])->Hit(ray, minDist, maxDist, tempHitInfo)) {
-         if (tempHitInfo.t < closest) {
-            isHitOccurred = true;
-            closest = tempHitInfo.t;
-            hitInfo = tempHitInfo;
-         }
-      }
+   if (m_BVH.FindIntersectingVolume(ray, minDist, maxDist, tempHitInfo)) {
+      hitInfo = tempHitInfo;
+      isHitOccurred = true;
    }
 
    return isHitOccurred;

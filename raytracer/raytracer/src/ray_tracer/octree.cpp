@@ -23,7 +23,7 @@ void Octree::ClearImpl(OctreeNode** node)
    *node = nullptr;
 }
 
-bool Octree::FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, std::vector<OctreeNode*>& outNodes) const
+bool Octree::FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, float minDist, float maxDist, HitInfo& hitInfo) const
 {
    if (!inNode) {
       return false;
@@ -38,14 +38,22 @@ bool Octree::FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, std::ve
    for (int i = 0; i < 8; i++) {
       if (inNode->childNodes[i]) {
          hasNotNullChild = true;
-         bool isFoundInChild = FindIntersectedNodeImpl(ray, inNode->childNodes[i], outNodes);
+         bool isFoundInChild = FindIntersectedNodeImpl(ray, inNode->childNodes[i], minDist, maxDist, hitInfo);
          isFound = isFound || isFoundInChild;
       }
    }
 
    if (!hasNotNullChild) {
-      outNodes.push_back(inNode);
-      isFound = true;
+      HitInfo tempHitInfo;
+      float closest = INFINITY;
+      for (int i = 0; i < inNode->objectsIndices.size(); i++) {
+         if (GetTriangleById(inNode->objectsIndices[i])->Hit(ray, minDist, maxDist, tempHitInfo)) {
+            if (tempHitInfo.t < closest) {
+               hitInfo = tempHitInfo;
+               isFound = true;
+            }
+         }
+      }
    }
 
    return isFound;
@@ -160,7 +168,7 @@ std::vector<AABB> Octree::GetAABB(const std::vector<int>& indices)
    return aabbs;
 }
 
-bool Octree::FindIntersectedNode(const Ray& ray, std::vector<OctreeNode*>& outNodes) const
+bool Octree::FindIntersectedNode(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
 {
-   return FindIntersectedNodeImpl(ray, m_Root, outNodes);
+   return FindIntersectedNodeImpl(ray, m_Root, minDist, maxDist, hitInfo);
 }

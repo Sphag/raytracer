@@ -8,6 +8,7 @@
 
 #include "objects/base_object.h"
 #include "ray_tracer/octree.h"
+#include "ray_tracer/bvh.h"
 #include "materials/base_material.h"
 #include "objects/triangle.h"
 
