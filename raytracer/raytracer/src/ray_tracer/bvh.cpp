@@ -36,6 +36,7 @@ bool BVH::FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, float minD
          if (GetObjectById(inNode->objectIndices[i])->Hit(ray, minDist, maxDist, tempHitInfo)) {
             if (tempHitInfo.t < closest) {
                hitInfo = tempHitInfo;
+               closest = tempHitInfo.t;
                isFound = true;
             }
          }

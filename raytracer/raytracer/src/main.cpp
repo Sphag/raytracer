@@ -29,24 +29,27 @@ int main()
    //hittableList->Add(std::make_shared<Sphere>(glm::vec3(-1, 0, -1), 0.5f, std::make_shared<Metalic>(FRGBA(0.8, 0.8, 0.8, 1.0f), 1.0f)));
    //hittableList->Add(std::make_shared<Sphere>(glm::vec3(-1, 0, -1), 0.5f, std::make_shared<Dielectric>(1.66f)));
    //hittableList->Add(std::make_shared<Sphere>(glm::vec3(-1, 0, -1), 0.45f, std::make_shared<Dielectric>(1.66f)));
-   std::shared_ptr<Model> model = std::make_shared<Model>("bunny.obj");
-   model->SetMaterial(std::make_shared<Lambertian>(FRGBA(0.6, 0.8, 0.8, 1.0f)));
-   /*std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(-0.25, 0, -3), 0.25f, std::make_shared<Lambertian>(FRGBA(0.0, 0.0, 0.8, 1.0f)));
-
+   //std::shared_ptr<Model> model = std::make_shared<Model>("bunny.obj");
+   //model->SetMaterial(std::make_shared<Lambertian>(FRGBA(0.6, 0.8, 0.8, 1.0f)));
+   std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(0, 0, -1), 0.5f, std::make_shared<Lambertian>(FRGBA(0.8, 0.5, 0.8, 1.0f)));
+   /*
    scene->Add(std::make_shared<Sphere>(glm::vec3(-1.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.9, 0.3, 0.3, 1.0))));
    scene->Add(std::make_shared<Sphere>(glm::vec3(-0.75, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.8, 0.3, 0.3, 1.0))));
    scene->Add(sphere);
    scene->Add(std::make_shared<Sphere>(glm::vec3(0.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));
    scene->Add(std::make_shared<Sphere>(glm::vec3(0.75, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));
    scene->Add(std::make_shared<Sphere>(glm::vec3(1.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));*/
-   scene->Add(model);
+   //scene->Add(model);
+   scene->Add(sphere);
+   scene->Add(std::make_shared<Plane>(glm::vec3(0, 1, 0), glm::vec3(0, -0.5, 0), std::make_shared<Lambertian>(FRGBA(0.7, 0.3, 0.3, 1.0))));
    scene->Construct();
-   RayTracer::Init(240, 135);
+   RayTracer::Init(960, 540);
    RayTracer::SetScene(scene);
-   RayTracer::SetSSRate(10);
-   RayTracer::SetBounceDepth(5);
-   //std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 16.f/9, 90.0f);
-   std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(-0.4f, 1.3f, 0.7f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(-0.3f, 1.0f, 0.0f), 16.0f / 9, 90.0f);
+   RayTracer::SetSSRate(100);
+   RayTracer::SetBounceDepth(50);
+   RayTracer::SetGamma(2);
+   std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 16.f/9, 90.0f);
+   //std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(-0.4f, 1.3f, 0.7f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(-0.3f, 1.0f, 0.0f), 16.0f / 9, 90.0f);
    RayTracer::SetCamera(camera);
    auto start = std::chrono::high_resolution_clock::now();
    auto image = RayTracer::Render();
