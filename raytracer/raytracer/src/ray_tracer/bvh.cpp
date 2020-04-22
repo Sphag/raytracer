@@ -12,6 +12,7 @@ void BVH::Construct(const std::vector<std::shared_ptr<BaseObject>>& objects)
    m_Objects = objects;
    std::vector<int> indices; for (int i = 0; i < objects.size(); i++) indices.push_back(i);
    ConstructImpl(&m_Root, indices);
+   m_AABB = m_Root->aabb;
 }
 
 bool BVH::FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, BVHNode** outNode) const
@@ -46,6 +47,7 @@ void BVH::ClearImpl(BVHNode** node)
       ClearImpl(&((*node)->first));
       ClearImpl(&((*node)->second));
       free(*node);
+      *node = nullptr;
    }
 }
 
@@ -55,7 +57,7 @@ void BVH::ConstructImpl(BVHNode** node, const std::vector<int>& indices)
    memset(*node, 0, sizeof(BVHNode));
 
    (*node)->objectIndices = indices;
-   (*node)->aabb = GetCommonAABB(GetAABB((*node)->objectIndices));
+   (*node)->aabb = GetCommonAABB(GetAABB(indices));
    if ((*node)->objectIndices.size() > MAX_OBJECTS_IN_VOLUME) {
       std::vector<int> objIndices = indices;
       std::sort(objIndices.begin(), objIndices.end(), [this](int lhs, int rhs) {

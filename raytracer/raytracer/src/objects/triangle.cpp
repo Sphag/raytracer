@@ -13,6 +13,7 @@ bool Triangle::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInf
    float t =  glm::dot(AO, m_Normal) * invdet;
    if (det >= RT_FloatEpsilon && t >= minDist && t <= maxDist && u >= 0.0 && v >= 0.0 && (u + v) <= 1.0) {
       hitInfo.hitPoint = ray.At(t);
+      hitInfo.t = t;
       hitInfo.SetFaceNormal(ray, glm::normalize(m_Normal));
       hitInfo.material = m_Material;
       return true;

@@ -5,25 +5,25 @@
 
 void Octree::Clear()
 {
-   ClearImpl(m_Root);
+   ClearImpl(&m_Root);
 }
 
-void Octree::ClearImpl(OctreeNode* node)
+void Octree::ClearImpl(OctreeNode** node)
 {
-   if (!node) {
+   if (!node || !*node) {
       return;
    }
 
    // clear child nodes
    for (int i = 0; i < 8; i++) {
-      ClearImpl(m_Root->childNodes[i]);
+      ClearImpl(&(*node)->childNodes[i]);
    }
 
-   free(node);
-   node = nullptr;
+   free(*node);
+   *node = nullptr;
 }
 
-bool Octree::FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, OctreeNode* outNode) const
+bool Octree::FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, std::vector<OctreeNode*>& outNodes) const
 {
    if (!inNode) {
       return false;
@@ -33,16 +33,24 @@ bool Octree::FindIntersectedNodeImpl(const Ray& ray, OctreeNode* inNode, OctreeN
       return false;
    }
 
+   bool hasNotNullChild = false;
+   bool isFound = false;
    for (int i = 0; i < 8; i++) {
-      if (inNode->childNodes[i] && FindIntersectedNodeImpl(ray, inNode->childNodes[i], outNode)) {
-         return true;
+      if (inNode->childNodes[i]) {
+         hasNotNullChild = true;
+         bool isFoundInChild = FindIntersectedNodeImpl(ray, inNode->childNodes[i], outNodes);
+         isFound = isFound || isFoundInChild;
       }
    }
 
-   outNode = inNode;
-   return true;
+   if (!hasNotNullChild) {
+      outNodes.push_back(inNode);
+      isFound = true;
+   }
+
+   return isFound;
 }
-static int nodeCount = 1;
+
 void Octree::Construct(const std::vector<std::shared_ptr<Triangle>>& objects)
 {
    m_Root = (OctreeNode*)malloc(sizeof(OctreeNode));
@@ -55,33 +63,53 @@ void Octree::Construct(const std::vector<std::shared_ptr<Triangle>>& objects)
    }
    m_Data = objects;
    m_Root->box = GetCommonAABB(GetAABB(m_Root->objectsIndices));
-   ConstructImpl(m_Root, objects);
+   m_TotalNodes = 1;
+   ConstructImpl(&m_Root, objects);
+   int a = 5;
 }
 
-void Octree::ConstructImpl(OctreeNode* node, const std::vector<std::shared_ptr<Triangle>>& objects)
+void Octree::ConstructImpl(OctreeNode** node, const std::vector<std::shared_ptr<Triangle>>& objects)
 {
-   if (node->objectsIndices.size() <= MAX_OBJECTS_IN_ONE_NODE) {
+   if (!node || !*node || (*node)->objectsIndices.size() <= MAX_OBJECTS_IN_ONE_NODE) {
       return;
    }
 
    // allocate child nodes
    for (int i = 0; i < 8; i++) {
-      node->childNodes[i] = (OctreeNode*)malloc(sizeof(OctreeNode));
-      memset(node->childNodes[i], 0, sizeof(OctreeNode));
+      (*node)->childNodes[i] = (OctreeNode*)malloc(sizeof(OctreeNode));
+      memset((*node)->childNodes[i], 0, sizeof(OctreeNode));
    }
-   nodeCount += 8;
-   SetUpBoxes(node);
+   m_TotalNodes += 8;
+   SetUpBoxes((*node));
 
    for (int i = 0; i < 8; i++) {
-      for (int j = 0; j < node->objectsIndices.size(); j++) {
-         if (IntersectMng::Intersects(node->childNodes[i]->box, *objects[node->objectsIndices[j]])) {
-            node->childNodes[i]->objectsIndices.push_back(node->objectsIndices[j]);
+      for (int j = 0; j < (*node)->objectsIndices.size(); j++) {
+         if (IntersectMng::Intersects((*node)->childNodes[i]->box, *objects[(*node)->objectsIndices[j]])) {
+            (*node)->childNodes[i]->objectsIndices.push_back((*node)->objectsIndices[j]);
          }
+      }
+
+      if (node != &m_Root && (*node)->childNodes[i]->objectsIndices.size() >= (*node)->objectsIndices.size()) {
+         // if child has at least as many objects as parent, that means that it wont be decreasing 
+         // with constructing the tree deeper down, so free all the child nodes and return
+         for (int k = 0; k < 8; k++) {
+            free((*node)->childNodes[k]);
+            (*node)->childNodes[k] = nullptr;
+         }
+
+         m_TotalNodes -= 8;
+
+         return;
       }
    }
 
    for (int i = 0; i < 8; i++) {
-      ConstructImpl(node->childNodes[i], objects);
+      if ((*node)->childNodes[i]->objectsIndices.size() == 0) {
+         free((*node)->childNodes[i]);
+         (*node)->childNodes[i] = nullptr;
+         m_TotalNodes -= 1;
+      }
+      ConstructImpl(&(*node)->childNodes[i], objects);
    }
 }
 
@@ -132,7 +160,7 @@ std::vector<AABB> Octree::GetAABB(const std::vector<int>& indices)
    return aabbs;
 }
 
-bool Octree::FindIntersectedNode(const Ray& ray, OctreeNode* outNode) const
+bool Octree::FindIntersectedNode(const Ray& ray, std::vector<OctreeNode*>& outNodes) const
 {
-   return FindIntersectedNodeImpl(ray, m_Root, outNode);
+   return FindIntersectedNodeImpl(ray, m_Root, outNodes);
 }

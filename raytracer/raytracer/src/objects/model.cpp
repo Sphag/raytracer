@@ -9,25 +9,34 @@ bool Model::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
    HitInfo tempHitInfo;
    bool isHitOccurred = false;
    float closest = maxDist;
-   if (!IntersectMng::Intersects(ray, m_BoundingBox)) {
+   
+   std::vector<OctreeNode*> nodesFound;
+   if (!m_Tree.FindIntersectedNode(ray, nodesFound)) {
       return false;
    }
 
-   OctreeNode* node = nullptr;
-   if (!m_Tree.FindIntersectedNode(ray, node)) {
-      return false;
+   RT_ASSERT(nodesFound.size());
+   volatile int nn = nodesFound.size();
+   for (int n = 0; n < nodesFound.size(); n++) {
+      for (int i = 0; i < nodesFound[n]->objectsIndices.size(); i++) {
+         if (m_Tree.GetTriangleById(nodesFound[n]->objectsIndices[i])->Hit(ray, minDist, maxDist, tempHitInfo)) {
+            closest = tempHitInfo.t;
+            hitInfo = tempHitInfo;
+            isHitOccurred = true;
+            hitInfo.material = m_Material;
+         }
+      }
    }
-
-   RT_ASSERT(node);
-
-   for (int i = 0; i < node->objectsIndices.size(); i++) {
-      if (m_Tree.GetTriangleById(i)->Hit(ray, minDist, maxDist, tempHitInfo)) {
+   
+   /*
+   for (int i = 0; i < m_Mesh.size(); i++) {
+      if (m_Mesh[i]->Hit(ray, minDist, maxDist, tempHitInfo)) {
          closest = tempHitInfo.t;
          hitInfo = tempHitInfo;
          isHitOccurred = true;
          hitInfo.material = m_Material;
       }
-   }
+   }*/
 
    return isHitOccurred;
 }
@@ -61,9 +70,9 @@ bool Model::Load(const std::string filePath)
    glm::vec3* verts = reinterpret_cast<glm::vec3*>(attrib.vertices.data());
    for (int i = 0; i < shapes[0].mesh.indices.size(); i+=3) {
       m_Mesh.emplace_back(std::make_shared<Triangle>(
-         verts[shapes[0].mesh.indices[i + 0].vertex_index],
-         verts[shapes[0].mesh.indices[i + 1].vertex_index],
-         verts[shapes[0].mesh.indices[i + 2].vertex_index]
+         10.0f * verts[shapes[0].mesh.indices[i + 0].vertex_index],
+         10.0f * verts[shapes[0].mesh.indices[i + 1].vertex_index],
+         10.0f * verts[shapes[0].mesh.indices[i + 2].vertex_index]
       ));
    }
 
