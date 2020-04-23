@@ -32,6 +32,8 @@ public:
    size_t Count() const { return m_Objects.size(); }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
+
+   void GetUV(const glm::vec3& point, float &u, float&v) const override {}
 private:
    std::vector<std::shared_ptr<BaseObject>> m_Objects;
    BVH m_BVH;

@@ -19,6 +19,24 @@ ImageURGBA ToURGBA(const ImageFRGBA& image)
    return out;
 }
 
+ImageFRGBA ToFRGBA(const ImageURGBA& image)
+{
+   ImageFRGBA out(image.Width(), image.Height());
+   for (int i = 0; i < image.Height(); i++) {
+      for (int j = 0; j < image.Width(); j++) {
+         FRGBA fcol = {
+            glm::clamp(float(image(i, j).r) / float(255), 0.0f, 1.0f),
+            glm::clamp(float(image(i, j).g) / float(255), 0.0f, 1.0f),
+            glm::clamp(float(image(i, j).b) / float(255), 0.0f, 1.0f),
+            1.0f
+         };
+         out(i, j) = fcol;
+      }
+   }
+
+   return out;
+}
+
 #endif
 
 void GammaCorrect(ImageFRGBA& image, float gamma)

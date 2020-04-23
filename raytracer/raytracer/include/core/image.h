@@ -26,12 +26,15 @@ public:
    {
       stbi_set_flip_vertically_on_load(1);
       stbi_flip_vertically_on_write(1);
+      int size = m_Width * m_Height * sizeof(Pixel);
       m_Data = reinterpret_cast<unsigned char*>(malloc(m_Width * m_Height * sizeof(Pixel)));
+      memset(m_Data, 0, m_Width * m_Height * sizeof(Pixel));
    }
 
    ~Image()
    {
       free(m_Data);
+      m_Data = nullptr;
    }
 
 
@@ -39,18 +42,23 @@ public:
    {
       m_Width = other.m_Width;
       m_Height = other.m_Height;
+      int size = other.DataSize();
+      m_Data = reinterpret_cast<unsigned char*>(malloc(other.DataSize()));
 
-      m_Data = reinterpret_cast<unsigned char*>((other.DataSize()));
-
-      for (int i = 0; i < other.PixelCount()) {
+      for (int i = 0; i < other.DataSize(); i++) {
          m_Data[i] = other.m_Data[i];
       }
+   }
+
+   Image(const std::string& fileName)
+   {
+      Load(fileName);
    }
 
    Image(Image&& other) :
       m_Width(std::move(other.m_Width)),
       m_Height(std::move(other.m_Height)),
-      m_Data(std::move(other.m_Data))
+      m_Data(other.m_Data)
    {
       other.m_Data = nullptr;
    }
@@ -63,7 +71,7 @@ public:
          m_Height = other.m_Height;
          m_Data = malloc(other.DataSize());
 
-         for (int i = 0; i < other.PixelCount(); i++) {
+         for (int i = 0; i < other.DataSize(); i++) {
             m_Data[i] = other.m_Data[i];
          }
       }
@@ -76,7 +84,7 @@ public:
       if (this != &other) {
          m_Width = std::move(other.m_Width);
          m_Height = std::move(other.m_Height);
-         m_Data = std::move(other.m_Data);
+         m_Data = other.m_Data;
          other.m_Data = nullptr;
       }
 
@@ -93,8 +101,8 @@ public:
    bool Load(const std::string fileName)
    {
       int dummyPixelSize = 0;
-      m_Data = stbi_load(fileName.c_str(), &m_Width, &m_Height, &m_ChCount, 0);
-
+      m_Data = stbi_load(fileName.c_str(), &m_Width, &m_Height, &dummyPixelSize, 4);
+      
       return true;
    }
 
@@ -159,6 +167,7 @@ using ImageFRGBA = Image<FRGBA>;
 using ImageURGBA = Image<URGBA>;
 
 ImageURGBA ToURGBA(const ImageFRGBA& image);
+ImageFRGBA ToFRGBA(const ImageURGBA& image);
 
 #endif 
 

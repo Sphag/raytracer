@@ -40,6 +40,7 @@ public:
    glm::vec3 A() const { return m_A; }
    glm::vec3 B() const { return m_B; }
    glm::vec3 C() const { return m_C; }
+   void GetUV(const glm::vec3& point, float &u, float&v) const override { }
 private:
    glm::vec3 m_A, m_B, m_C;
    glm::vec3 m_AB, m_AC;

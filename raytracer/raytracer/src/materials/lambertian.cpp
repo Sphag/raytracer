@@ -8,7 +8,8 @@ bool Lambertian::Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenu
 
    glm::vec3 scatterDir = glm::normalize(glm::normalize(hitInfo.normal) + RandomUnitVector());
    scattered.emplace_back(hitInfo.hitPoint, scatterDir);
-   attenuation = m_Albedo;
+   auto fff = m_Albedo->Value(hitInfo.u, hitInfo.v, hitInfo.hitPoint);
+   attenuation = fff;
 
    return true;
 }

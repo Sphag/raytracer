@@ -28,6 +28,8 @@ struct HitInfo
    glm::vec3 hitPoint;
    glm::vec3 normal;
    std::shared_ptr<BaseMaterial> material;
+   float u;
+   float v;
    float t;
    bool isFrontFace;
 

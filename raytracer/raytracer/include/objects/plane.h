@@ -32,6 +32,8 @@ public:
    glm::vec3 GetNormal() const { return m_Normal; }
    glm::vec3 GetOffset() const { return m_Offset; }
 
+   void GetUV(const glm::vec3& point, float& u, float& v) const override;
+
 private:
    glm::vec3 m_Normal;
    glm::vec3 m_Offset;

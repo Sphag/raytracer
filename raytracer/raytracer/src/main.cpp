@@ -13,7 +13,9 @@
 #include "ray_tracer/intersect_mng.h"
 
 #include <chrono>
-
+#include <textures/constant_texture.h>
+#include <textures/checker_texture.h>
+#include <textures/image_texture.h>
 
 
 int main()
@@ -31,7 +33,6 @@ int main()
    //hittableList->Add(std::make_shared<Sphere>(glm::vec3(-1, 0, -1), 0.45f, std::make_shared<Dielectric>(1.66f)));
    //std::shared_ptr<Model> model = std::make_shared<Model>("bunny.obj");
    //model->SetMaterial(std::make_shared<Lambertian>(FRGBA(0.6, 0.8, 0.8, 1.0f)));
-   std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(0, 0, -1), 0.5f, std::make_shared<Lambertian>(FRGBA(0.8, 0.5, 0.8, 1.0f)));
    /*
    scene->Add(std::make_shared<Sphere>(glm::vec3(-1.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.9, 0.3, 0.3, 1.0))));
    scene->Add(std::make_shared<Sphere>(glm::vec3(-0.75, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.8, 0.3, 0.3, 1.0))));
@@ -40,13 +41,23 @@ int main()
    scene->Add(std::make_shared<Sphere>(glm::vec3(0.75, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));
    scene->Add(std::make_shared<Sphere>(glm::vec3(1.25, 0, -3), 0.25, std::make_shared<Lambertian>(FRGBA(0.0, 0.9, 0.0, 1.0))));*/
    //scene->Add(model);
+   std::shared_ptr<BaseTexture> ct1 = std::make_shared<ConstantTexture>(FRGBA(1.0f, 0.0f, 1.0f, 1.0f));
+   std::shared_ptr<BaseTexture> ct2 = std::make_shared<ConstantTexture>(FRGBA(1.0f, 1.0f, 0.0f, 1.0f));
+   std::shared_ptr<BaseTexture> cht = std::make_shared<CheckerTexture>(ct1, ct2);
+   ImageURGBA tex("earthmap.jpg");
+   ImageFRGBA ftex = ToFRGBA(tex);
+   auto a = ftex(285, 73);
+   tex.Write("asd.png");
+   //std::shared_ptr<BaseTexture> it = std::make_shared<ImageTexture>("earthmap.jpg");
+   std::shared_ptr<BaseTexture> it = std::make_shared<ImageTexture>(ftex);
+   std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(glm::vec3(0, 0, -1), 0.5f, std::make_shared<Lambertian>(it));
    scene->Add(sphere);
-   scene->Add(std::make_shared<Plane>(glm::vec3(0, 1, 0), glm::vec3(0, -0.5, 0), std::make_shared<Lambertian>(FRGBA(0.7, 0.3, 0.3, 1.0))));
+   scene->Add(std::make_shared<Plane>(glm::vec3(0, 1, 0), glm::vec3(0, -0.5, 0), std::make_shared<Lambertian>(cht)));
    scene->Construct();
    RayTracer::Init(960, 540);
    RayTracer::SetScene(scene);
-   RayTracer::SetSSRate(100);
-   RayTracer::SetBounceDepth(50);
+   RayTracer::SetSSRate(25);
+   RayTracer::SetBounceDepth(15);
    RayTracer::SetGamma(2);
    std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 16.f/9, 90.0f);
    //std::shared_ptr<Camera> camera = std::make_shared<Camera>(glm::vec3(-0.4f, 1.3f, 0.7f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(-0.3f, 1.0f, 0.0f), 16.0f / 9, 90.0f);

@@ -17,6 +17,8 @@ public:
    virtual bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const = 0;
 
    AABB GetAABB() const { return m_BoundingBox; }
+
+   virtual void GetUV(const glm::vec3& point, float &u, float&v) const = 0;
 protected:
    AABB m_BoundingBox;
    std::shared_ptr<BaseMaterial> m_Material;

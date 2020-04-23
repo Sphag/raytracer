@@ -23,6 +23,7 @@ bool Sphere::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo)
       hitInfo.t = t1;
       hitInfo.SetFaceNormal(ray, glm::normalize(hitInfo.hitPoint - m_Center));
       hitInfo.material = m_Material;
+      GetUV((hitInfo.hitPoint - m_Center) / m_Radius, hitInfo.u, hitInfo.v);
       return true;
    }
 
@@ -32,8 +33,17 @@ bool Sphere::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo)
       hitInfo.t = t2;
       hitInfo.SetFaceNormal(ray, glm::normalize(hitInfo.hitPoint - m_Center));
       hitInfo.material = m_Material;
+      GetUV((hitInfo.hitPoint - m_Center) / m_Radius, hitInfo.u, hitInfo.v);
       return true;
    }
 
    return false;
+}
+
+void Sphere::GetUV(const glm::vec3& point, float &u, float&v) const
+{
+   float phi = glm::atan(point.z, point.x);
+   float theta = glm::asin(point.y);
+   u = 1 - (phi + RT_FloatPi) / (2 * RT_FloatPi);
+   v = (theta + RT_FloatPi / 2) / RT_FloatPi;
 }

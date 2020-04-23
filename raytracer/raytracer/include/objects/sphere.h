@@ -28,7 +28,7 @@ public:
 
    void SetCenter(const glm::vec3& center) { m_Center = center; }
    void SetRadius(float radius) { RT_ASSERT(radius > 0.0f); m_Radius = radius; }
-
+   void GetUV(const glm::vec3& point, float &u, float&v) const override;
 private:
    glm::vec3                     m_Center;
    float                         m_Radius;

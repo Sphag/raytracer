@@ -20,6 +20,8 @@ public:
 
    glm::vec3 GetCenter() const { return m_Center; }
    glm::vec3 GetDim() const { return m_Dim; }
+
+   void GetUV(const glm::vec3& point, float& u, float& v) const override { u = 0.0f; v = 0.0f; }
    
 private:
    glm::vec3 m_Center;
