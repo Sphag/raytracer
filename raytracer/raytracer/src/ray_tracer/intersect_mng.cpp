@@ -355,17 +355,17 @@ bool IntersectMng::Intersects(const AABB& lhs, const Ray& rhs)
    glm::vec3 max = lhs.GetCenter() + lhs.GetDim();
    float t0 = glm::min(min.x - rhs.Origin().x, max.x - rhs.Origin().x / rhs.Direction().x);
    float t1 = glm::max(min.x - rhs.Origin().x, max.x - rhs.Origin().x / rhs.Direction().x);
-   if (t1 <= t0)
+   if (t1 < t0)
       return false;
 
    t0 = glm::min(min.y - rhs.Origin().y, max.y - rhs.Origin().y / rhs.Direction().y);
    t1 = glm::max(min.y - rhs.Origin().y, max.y - rhs.Origin().y / rhs.Direction().y);
-   if (t1 <= t0)
+   if (t1 < t0)
       return false;
 
    t0 = glm::min(min.z - rhs.Origin().z, max.z - rhs.Origin().z / rhs.Direction().z);
    t1 = glm::max(min.z - rhs.Origin().z, max.z - rhs.Origin().z / rhs.Direction().z);
-   if (t1 <= t0)
+   if (t1 < t0)
       return false;
    
    return true;

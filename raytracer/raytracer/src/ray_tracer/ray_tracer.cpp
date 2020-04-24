@@ -14,6 +14,7 @@ int                           RayTracer::s_SPP = 1;
 std::shared_ptr<Camera>       RayTracer::s_Camera = std::make_shared<Camera>();
 float                         RayTracer::s_Gamma = 2.0f;
 uint32_t                      RayTracer::s_Depth = 50;
+FRGBA                         RayTracer::s_AmbientLight = RT_FBLACK;
 
 
 void RayTracer::Init(int width, int height)
@@ -46,6 +47,11 @@ void RayTracer::SetGamma(float gamma)
 void RayTracer::SetBounceDepth(uint32_t bounceDepth)
 {
    s_Depth = bounceDepth;
+}
+
+void RayTracer::SetAmbientLight(FRGBA ambientLight)
+{
+   s_AmbientLight = ambientLight;
 }
 
 ImageURGBA RayTracer::Render()
@@ -90,40 +96,19 @@ FRGBA RayTracer::ColorRay(const Ray& ray, uint32_t depth)
    if (s_HittableList->Hit(ray, RT_FloatEpsilon, RT_FloatInfinity, hitInfo)) {
       std::vector<Ray> scattered;
       FRGBA attenuation;
+      FRGBA emitted = hitInfo.material->Emitted(hitInfo.u, hitInfo.v, hitInfo.hitPoint);
       if (hitInfo.material->Scatter(ray, hitInfo, attenuation, scattered)) {
-         RT_ASSERT(scattered.size() != 0);
-               return attenuation * ColorRay(scattered[0], depth - 1);
-         volatile MATERIAL_TYPE materialType = hitInfo.material->GetMaterialType();
-         switch (materialType) {
-            case MATERIAL_TYPE::LAMBERTIAN:
-            case MATERIAL_TYPE::METALIC:
-               return attenuation * ColorRay(scattered[0], depth - 1);
-            case MATERIAL_TYPE::DIELECTRIC:
-               return attenuation * ColorRay(scattered[0], depth - 1);
-#if 0
-            {
-               if (scattered.size() > 1) {
-                  FRGBA refractedColor = ColorRay(scattered[1], depth - 1);
-                  FRGBA reflectedColor = ColorRay(scattered[0], depth - 1);
-                  return attenuation * (refractedColor + reflectedColor) / 2.0f;
-               } else {
-                  return attenuation * ColorRay(scattered[0], depth - 1);
-               }
-            }
-#endif
-            case MATERIAL_TYPE::UNKNOWN:
-            {
-               MATERIAL_TYPE m = hitInfo.material->GetMaterialType();
-               RT_ASSERT(false);
-               return RT_FBLACK;
-            }
-         }
+            RT_ASSERT(scattered.size() != 0);
+            return emitted + attenuation * ColorRay(scattered[0], depth - 1);
       } else {
-         return RT_FBLACK;
+         return emitted;
       }
    }
 
-   glm::vec3 unitDirection = glm::normalize(ray.Direction());
+   return s_AmbientLight;
+
+
+   /*glm::vec3 unitDirection = glm::normalize(ray.Direction());
    float t = 0.5f * (unitDirection.y + 1.0f);
-   return glm::lerp(FRGBA(1.0f), FRGBA(0.5f, 0.7f, 1.0f, 1.0f), t);
+   return glm::lerp(FRGBA(1.0f), FRGBA(0.5f, 0.7f, 1.0f, 1.0f), t);*/
 }

@@ -20,6 +20,7 @@ public:
    static void SetSSRate(int samplesPerPixel);
    static void SetGamma(float gamma);
    static void SetBounceDepth(uint32_t bounceDepth);
+   static void SetAmbientLight(FRGBA ambientLight);
 
    static ImageURGBA Render();
 private:
@@ -32,6 +33,7 @@ private:
    static std::shared_ptr<Camera>       s_Camera;
    static float                         s_Gamma;
    static uint32_t                      s_Depth;
+   static FRGBA                         s_AmbientLight;
 };
 
 #endif
