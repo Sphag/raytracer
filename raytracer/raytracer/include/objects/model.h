@@ -28,6 +28,8 @@ public:
    bool Load(const std::string filePath);
    void SetMaterial(std::shared_ptr<BaseMaterial> material) { m_Material = material; }
    void GetUV(const glm::vec3& point, float& u, float& v) const override { u = 0.0f; v = 0.0f; }
+   Octree& GetTree() { return m_Tree; }
+   void Clear() { m_Tree.Clear(); m_Mesh.clear(); m_VertexNormals.clear(); }
 private:
    std::vector<std::shared_ptr<Triangle>> m_Mesh;
    std::vector<glm::vec3> m_VertexNormals;

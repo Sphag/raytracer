@@ -170,5 +170,39 @@ std::vector<AABB> Octree::GetAABB(const std::vector<int>& indices)
 
 bool Octree::FindIntersectedNode(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
 {
-   return FindIntersectedNodeImpl(ray, m_Root, minDist, maxDist, hitInfo);
+   if (!m_Root) {
+      return false;
+   }
+
+   HitInfo temp;
+   float closest = INFINITY;
+   bool isFound = false;
+
+   std::stack<OctreeNode*> nodeStack;
+   nodeStack.push(m_Root);
+   while (!nodeStack.empty()) {
+      OctreeNode* top = nodeStack.top();
+      nodeStack.pop();
+
+      bool hasNotNullChilds = false;
+      for (int i = 0; i < 8; i++) {
+         if (top->childNodes[i]) {
+            hasNotNullChilds = true;
+            nodeStack.push(top->childNodes[i]);
+         }
+      }
+
+      if (!hasNotNullChilds) {         
+         for (int i = 0; i < top->objectsIndices.size(); i++) {
+            if (GetTriangleById(top->objectsIndices[i])->Hit(ray, minDist, maxDist, temp) && temp.t < closest) {
+               hitInfo = temp;
+               closest = temp.t;
+               isFound = true;
+            }
+         }
+      }
+   }
+
+   return isFound;
+   //return FindIntersectedNodeImpl(ray, m_Root, minDist, maxDist, hitInfo);
 }

@@ -75,7 +75,7 @@ ImageURGBA RayTracer::Render()
          image(i, j) = color;
 
          p++;
-         if (p % 1000 == 0) {
+         if (p % 100 == 0) {
             std::cout << p * 100.0f / totalPixels << "% Done" << std::endl;
          }
       }

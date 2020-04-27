@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <cctype>
+#include <stack>
 #include <cstdlib>
 
 ////////////////////////////////////////////////////////////////////////////////

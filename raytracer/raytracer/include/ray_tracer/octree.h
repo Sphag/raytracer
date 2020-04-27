@@ -13,11 +13,11 @@ struct OctreeNode
 };
 
 
-constexpr int MAX_OBJECTS_IN_ONE_NODE = 500;
 
 class Octree
 {
 public:
+   int MAX_OBJECTS_IN_ONE_NODE = 50000;
    Octree(const AABB& initialBox = AABB()) : m_InitialBox(initialBox), m_Data(), m_Root(nullptr), m_TotalNodes(0) {}
 
    void Clear();
