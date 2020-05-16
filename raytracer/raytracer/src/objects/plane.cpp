@@ -21,6 +21,12 @@ bool Plane::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
    return false;
 }
 
+void Plane::ApplyTransform()
+{
+   m_Offset = glm::vec3(m_Transform.GetMatrix() * glm::vec4(m_Offset, 1.0f));
+   m_Normal = glm::vec3(m_Transform.GetMatrix() * glm::vec4(m_Normal, 1.0f));
+}
+
 void Plane::GetUV(const glm::vec3& point, float& u, float& v) const
 {
    

@@ -25,15 +25,19 @@ public:
       m_C(C)
    {
       m_Material = material;
-      m_AB = m_B - m_A;
-      m_AC = m_C - m_A;
-      m_Normal = glm::cross(m_AB, m_AC);
-      glm::vec3 min = glm::min(glm::min(A, B), C);
-      glm::vec3 max = glm::max(glm::max(A, B), C);
-      m_BoundingBox = { 0.5f * (max + min), max - 0.5f * (max + min) };
+      CalculateMisc();
    }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
+   void ApplyTransform() override;
+   void CalculateMisc() {
+      m_AB = m_B - m_A;
+      m_AC = m_C - m_A;
+      m_Normal = glm::cross(m_AB, m_AC);
+      glm::vec3 min = glm::min(glm::min(m_A, m_B), m_C);
+      glm::vec3 max = glm::max(glm::max(m_A, m_B), m_C);
+      m_BoundingBox = { 0.5f * (max + min), max - 0.5f * (max + min) };
+   }
    Plane GetPlane() const { return Plane(m_Normal, m_A, m_Material); }
    
    glm::vec3 GetNormal() const { return m_Normal; }

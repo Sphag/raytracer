@@ -12,6 +12,14 @@ bool Quad::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) c
    return false;
 }
 
+void Quad::ApplyTransform()
+{
+   m_Tri1.SetTransform(m_Transform);
+   m_Tri2.SetTransform(m_Transform);
+   m_Tri1.ApplyTransform();
+   m_Tri2.ApplyTransform();
+}
+
 void Quad::GetUV(const glm::vec3& point, float &u, float&v) const
 {
    glm::vec3 diag = m_Tri1.C() - m_Tri1.A();

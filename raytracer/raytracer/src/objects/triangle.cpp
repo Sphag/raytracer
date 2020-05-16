@@ -22,3 +22,12 @@ bool Triangle::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInf
    return false;
 }
 
+void Triangle::ApplyTransform()
+{
+   auto as = m_Transform.GetMatrix();
+   m_A = glm::vec3(m_Transform.GetMatrix() * glm::vec4(m_A, 1.0f));
+   m_B = glm::vec3(m_Transform.GetMatrix() * glm::vec4(m_B, 1.0f));
+   m_C = glm::vec3(m_Transform.GetMatrix() * glm::vec4(m_C, 1.0f));
+   CalculateMisc();
+}
+

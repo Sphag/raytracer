@@ -28,6 +28,7 @@ public:
    }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
+   void ApplyTransform() override;
 
    glm::vec3 GetNormal() const { return m_Normal; }
    glm::vec3 GetOffset() const { return m_Offset; }

@@ -6,7 +6,7 @@ bool Dielectric::Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenu
 {
    RT_ASSERT(scattered.size() == 0);
 
-   attenuation = RT_FWHITE;
+   attenuation = m_Albedo->Value(hitInfo.u, hitInfo.v, hitInfo.hitPoint);
    float ratio = hitInfo.isFrontFace ? 1.0f / m_RefractionIdx : m_RefractionIdx;
 
    glm::vec3 unitDirection = glm::normalize(rayIn.Direction());
@@ -14,7 +14,7 @@ bool Dielectric::Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenu
    float sinEta = glm::sqrt(1.0f - cosEta * cosEta);
    glm::vec3 direction = glm::refract(unitDirection, hitInfo.normal, ratio);
    float reflectProbe = Schlick(cosEta, ratio);
-   if (direction != glm::vec3(0.0f) && reflectProbe < RT_RandomFloat() || direction == glm::vec3(0.0f)) {
+   if (direction != glm::vec3(0.0f) &&  RT_RandomFloat() < reflectProbe || direction == glm::vec3(0.0f)) {
       direction = glm::reflect(unitDirection, hitInfo.normal);
    }
    scattered.emplace_back(hitInfo.hitPoint, direction);

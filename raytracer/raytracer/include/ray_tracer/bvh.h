@@ -16,7 +16,7 @@ struct BVHNode
    std::vector<int> objectIndices;
 };
 
-constexpr int MAX_OBJECTS_IN_VOLUME = 20;
+constexpr int MAX_OBJECTS_IN_VOLUME = 10;
 
 class BVH
 {

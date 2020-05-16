@@ -22,7 +22,7 @@ class BaseMaterial
 public:
    virtual ~BaseMaterial() {}
    virtual bool  Scatter(const Ray& rayIn, const HitInfo& hitInfo, FRGBA& attenuation, std::vector<Ray>& scattered) const = 0;
-   virtual FRGBA Emitted(float u, float v, const glm::vec3& p) const { return RT_FBLACK; }
+   virtual FRGBA Emitted(float u, float v, const glm::vec3& p) const { return glm::vec4(0.0f); }
    virtual MATERIAL_TYPE GetMaterialType() const { return MATERIAL_TYPE::UNKNOWN; };
 };
 

@@ -23,6 +23,7 @@ public:
    void Add(std::shared_ptr<BaseObject> object) { m_Objects.push_back(object); }
    void Construct() 
    { 
+      for (auto& obj : m_Objects) obj->ApplyTransform();
       m_BVH.Construct(m_Objects);
       std::vector<int> ind; for (int i = 0; i < m_Objects.size(); i++) ind.push_back(i);
       bool res = m_BVH.GetRootAABB(m_BoundingBox);
@@ -32,6 +33,7 @@ public:
    size_t Count() const { return m_Objects.size(); }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
+   void ApplyTransform() {}
 
    void GetUV(const glm::vec3& point, float &u, float&v) const override {}
 private:

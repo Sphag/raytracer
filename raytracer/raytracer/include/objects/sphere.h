@@ -22,6 +22,11 @@ public:
    Sphere& operator=(Sphere&& other) = default;
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
+   void ApplyTransform() override 
+   { 
+      m_Center = glm::vec3(m_Transform.GetMatrix() * glm::vec4(m_Center, 1.0f));
+      m_BoundingBox = { m_Center, {m_Radius, m_Radius, m_Radius} };
+   }
 
    glm::vec3 GetCenter() const { return m_Center; }
    float     GetRadius() const { return m_Radius; }

@@ -11,6 +11,7 @@
 
 # Models
 *.obj
+*.mtl
 
 # Binaries and generated stuff
 generated/

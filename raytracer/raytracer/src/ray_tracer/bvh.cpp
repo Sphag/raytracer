@@ -26,12 +26,12 @@ bool BVH::FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, float minD
    }
 
    bool isFound = false;
-   isFound = isFound || FindIntersectingVolumeImpl(ray, inNode->first, minDist, maxDist, hitInfo);
-   isFound = isFound || FindIntersectingVolumeImpl(ray, inNode->second, minDist, maxDist, hitInfo);
+   isFound = FindIntersectingVolumeImpl(ray, inNode->first, minDist, maxDist, hitInfo) || isFound;
+   isFound = FindIntersectingVolumeImpl(ray, inNode->second, minDist, maxDist, hitInfo) || isFound;
 
    if (!inNode->first && !inNode->second) {
       HitInfo tempHitInfo;
-      float closest = INFINITY;
+      float closest = hitInfo.t;
       for (int i = 0; i < inNode->objectIndices.size(); i++) {
          if (GetObjectById(inNode->objectIndices[i])->Hit(ray, minDist, maxDist, tempHitInfo)) {
             if (tempHitInfo.t < closest) {
@@ -45,6 +45,7 @@ bool BVH::FindIntersectingVolumeImpl(const Ray& ray, BVHNode* inNode, float minD
 
    return isFound;
 }
+
 
 void BVH::ClearImpl(BVHNode** node)
 {
@@ -90,5 +91,6 @@ std::vector<AABB> BVH::GetAABB(const std::vector<int>& indices)
 
 bool BVH::FindIntersectingVolume(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const
 {
+   hitInfo.t = INFINITY;
    return FindIntersectingVolumeImpl(ray, m_Root, minDist, maxDist, hitInfo);
 }

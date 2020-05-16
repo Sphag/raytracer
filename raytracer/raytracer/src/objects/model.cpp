@@ -31,6 +31,14 @@ bool Model::Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) 
    return isHitOccurred;
 }
 
+void Model::ApplyTransform()
+{
+   for (auto& obj : m_Mesh) {
+      obj->SetTransform(m_Transform);
+      obj->ApplyTransform();
+   }
+}
+
 bool Model::Load(const std::string filePath)
 {
    tinyobj::attrib_t attrib;

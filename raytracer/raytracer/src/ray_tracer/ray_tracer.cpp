@@ -64,6 +64,8 @@ ImageURGBA RayTracer::Render()
    for (int i = 0; i < image.Height(); i++) {
       for (int j = 0; j < image.Width(); j++) {
          FRGBA color(0.0f);
+         if (i == image.Height() / 2 && j == image.Width() / 2) 
+            volatile int aa = 5;
          for (int k = 0; k < s_SPP; k++) {
             float v = float(i + RT_RandomFloat()) / image.Height();
             float u = float(j + RT_RandomFloat()) / image.Width();
@@ -75,7 +77,7 @@ ImageURGBA RayTracer::Render()
          image(i, j) = color;
 
          p++;
-         if (p % 100 == 0) {
+         if (p % 1 == 0) {
             std::cout << p * 100.0f / totalPixels << "% Done" << std::endl;
          }
       }

@@ -4,7 +4,7 @@
 
 FRGBA CheckerTexture::Value(float u, float v, const glm::vec3& hitPoint) const
 {
-   float sines = glm::compMul(glm::sin(10.0f * hitPoint));
+   float sines = glm::sin(40*u) * glm::sin(40*v);//glm::compMul(glm::sin(10.0f * hitPoint));
    if (sines < 0) {
       return m_Tex1->Value(u, v, hitPoint);
    } else {

@@ -22,6 +22,7 @@ public:
    }
 
    bool Hit(const Ray& ray, float minDist, float maxDist, HitInfo& hitInfo) const override;
+   void ApplyTransform() override;
 
    void GetUV(const glm::vec3& point, float &u, float&v) const override;
 private:
